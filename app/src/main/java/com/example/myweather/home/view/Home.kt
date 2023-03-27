@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.myweather.GpsLocation
 import com.example.myweather.R
 import com.example.myweather.SendLocation
@@ -25,15 +26,14 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Home : Fragment(), SendLocation{
+class Home : Fragment(){
 
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var viewModel: HomeViewModel
     lateinit var dailyAdapter: HomeDailyAdapter
     lateinit var hourlyAdapter: HomeHourlyAdapter
     lateinit var binding: FragmentHomeBinding
-    var lat: Double = 0.0 //31.217293724615672
-    var lon: Double = 0.0 //29.960048284658562
+    //31.217293724615672 //29.960048284658562
 
     lateinit var geocoder: Geocoder
     lateinit var gps: GpsLocation
@@ -58,18 +58,31 @@ class Home : Fragment(), SendLocation{
             Repository.getInstance(WeatherClient.getInstance()/*, ConcreteLocalDataSource(this)*/),
             requireContext(), gps)
         viewModel = ViewModelProvider(this, homeFactory)[HomeViewModel::class.java]
+
+        //Get Address by GeoCoder
         viewModel.lon_lat.observe(viewLifecycleOwner){
             geocoder = Geocoder(requireContext(), Locale.getDefault())
             addressList= geocoder.getFromLocation(it.lon, it.lat, 1) as MutableList<Address>
             binding.locationTvHome.text= addressList[0].adminArea + " " + addressList[0].countryName
         }
+
+        //Display Data
         viewModel.current.observe(viewLifecycleOwner){
             if (it != null){
                 binding.tempTvHome.text= "${it.current.temp.toInt().toString()} °C"
                 binding.dateTvHome.text= getCurrentDay(it.current.dt.toInt())
-                Glide.with(this)
-                    .load("https://openweathermap.org/img/wn/${it.current.weather[0].icon}@2x.png")
-                    .into(binding.imageView)
+                //binding.descriptionHomeTv.text= it.current.weather[0].description.toString()
+                //println("Description: ${it.current.weather[0].description}")
+                when(it.current.weather[0].icon){
+                    "01n" -> binding.imageView.setImageResource(R.drawable.monn)
+                    "01d" -> binding.imageView.setImageResource(R.drawable.sunny)
+                    "02d" -> binding.imageView.setImageResource(R.drawable.cloudy_sunny)
+                    else ->
+                        Glide.with(this)
+                            .load("https://openweathermap.org/img/wn/${it.current.weather[0].icon}@2x.png")
+                            .into(binding.imageView)
+                }
+                println("Current: ${it.current.weather[0].icon}")
                 binding.cloudsTv.text= it.current.clouds.toString()
                 binding.pressureTv.text= it.current.pressure.toString()
                 binding.ultraTv.text= it.current.uvi.toString()
@@ -100,10 +113,5 @@ class Home : Fragment(), SendLocation{
         calendar.set(Calendar.DAY_OF_MONTH,intDay)
         var format= SimpleDateFormat("EEEE-dd-MMM")
         return format.format(calendar.time)
-    }
-
-    override fun location(longitude: Double, latitude: Double) {
-        lon= longitude
-        lat= latitude
     }
 }

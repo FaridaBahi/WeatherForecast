@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.myweather.R
 import com.example.myweather.databinding.DailyItemBinding
 import com.example.myweather.databinding.HourlyItemBinding
 import com.example.myweather.model.Current
@@ -33,9 +34,14 @@ class HomeHourlyAdapter(var context: Context, var hourlyList: List<Current>)
         val hour: Current= hourlyList[position]
         holder.binding.tempHourlyItem.text= hour.temp.toInt().toString() + "°C"
         holder.binding.hourTv.text= getCurrentTime(hour.dt.toInt()) + "00"
-        Glide.with(context)
-            .load("https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png")
-            .into(holder.binding.iconHourlyItem)
+        when(hour.weather[0].icon){
+            "01n" -> holder.binding.iconHourlyItem.setImageResource(R.drawable.monn)
+            "01d" -> holder.binding.iconHourlyItem.setImageResource(R.drawable.sunny)
+            "02d" -> holder.binding.iconHourlyItem.setImageResource(R.drawable.cloudy_sunny)
+            else -> Glide.with(context)
+                .load("https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png")
+                .into(holder.binding.iconHourlyItem)
+        }
     }
 
     override fun getItemCount(): Int {
