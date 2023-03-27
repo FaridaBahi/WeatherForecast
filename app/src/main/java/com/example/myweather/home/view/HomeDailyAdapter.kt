@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.myweather.R
 import com.example.myweather.databinding.DailyItemBinding
 import com.example.myweather.model.Daily
 import java.text.SimpleDateFormat
@@ -28,9 +29,15 @@ class HomeDailyAdapter(var context: Context, var dailyList: List<Daily>)
     override fun onBindViewHolder(holder: DailyViewHolder, position: Int) {
         val day: Daily= dailyList[position]
         holder.binding.dayDailyItemTv.text= getCurrentDay(day.dt.toInt())
-        Glide.with(context)
+        when(day.weather[0].icon){
+            "01n" -> holder.binding.iconDailyItem.setImageResource(R.drawable.monn)
+            "01d" -> holder.binding.iconDailyItem.setImageResource(R.drawable.sunny)
+            "02d" -> holder.binding.iconDailyItem.setImageResource(R.drawable.cloudy_sunny)
+            else -> Glide.with(context)
             .load("https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png")
             .into(holder.binding.iconDailyItem)
+        }
+
         //holder.binding.descriptionDailyItemTv.text = day.weather[0].description.toString()
        holder.binding.tempDailyItem.text= "${day.temp.min.toInt()}/${day.temp.max.toInt()}°C"
     }

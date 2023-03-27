@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/icon_hourly_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="115dp"
+            android:layout_height="88dp"
             android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="@+id/hour_tv"
             app:layout_constraintStart_toStartOf="@+id/hour_tv"
