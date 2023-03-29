@@ -14,12 +14,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.myweather.GpsLocation
 import com.example.myweather.R
 import com.example.myweather.SendLocation
 import com.example.myweather.databinding.FragmentHomeBinding
 import com.example.myweather.home.viewmodel.HomeViewModel
 import com.example.myweather.home.viewmodel.HomeViewModelFactory
+import com.example.myweather.locations.GpsLocation
+import com.example.myweather.locations.MapsActivity
 import com.example.myweather.model.Repository
 import com.example.myweather.network.WeatherClient
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -37,6 +38,7 @@ class Home : Fragment(){
 
     lateinit var geocoder: Geocoder
     lateinit var gps: GpsLocation
+    lateinit var maps: MapsActivity
     lateinit var addressList: MutableList<Address>
 
     override fun onCreateView(
@@ -53,11 +55,20 @@ class Home : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         gps= GpsLocation(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
+        maps= MapsActivity()
 
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(WeatherClient.getInstance()/*, ConcreteLocalDataSource(this)*/),
-            requireContext(), gps)
+            requireContext(), gps, maps)
         viewModel = ViewModelProvider(this, homeFactory)[HomeViewModel::class.java]
+
+        /*while (sharedPerfernce){
+           maps -> viewModel.getLocationByMaps()
+            gps ->  viewModel.getLocationByGps(requireContext())
+            else -> notificataion
+        }*/
+
+        viewModel.getLocationByGps(requireContext())
 
         //Get Address by GeoCoder
         viewModel.lon_lat.observe(viewLifecycleOwner){

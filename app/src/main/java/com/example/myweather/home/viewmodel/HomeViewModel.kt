@@ -2,7 +2,8 @@ package com.example.myweather.home.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.*
-import com.example.myweather.GpsLocation
+import com.example.myweather.locations.GpsLocation
+import com.example.myweather.locations.MapsActivity
 import com.example.myweather.model.Current
 import com.example.myweather.model.RepositoryInterface
 import com.example.myweather.model.ResponseModel
@@ -12,7 +13,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val repo: RepositoryInterface,
     val context: Context,
-    val gps: GpsLocation
+    val gps: GpsLocation,
+    val maps: MapsActivity
 ) : ViewModel() {
     private var _current: MutableLiveData<ResponseModel> = MutableLiveData<ResponseModel>()
     val current: LiveData<ResponseModel> = _current
@@ -20,14 +22,9 @@ class HomeViewModel(
     private var _lon_lat: MutableLiveData<LongitudeAndLatitude> = MutableLiveData()
     val lon_lat: LiveData<LongitudeAndLatitude> = _lon_lat
 
-    /*private var _longitude: MutableLiveData<Double> = MutableLiveData()
-    val longitude: LiveData<Double> = _longitude
-    private var _latitude: MutableLiveData<Double> = MutableLiveData()
-    val latitude: LiveData<Double> = _latitude*/
+    private var _address: MutableLiveData<String> = MutableLiveData()
+    val address: LiveData<String> = _address
 
-    init {
-        getLocation(context)
-    }
 
     fun getRemoteWeather(lat: Double, lon: Double, lang: String, appid: String, units: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,7 +32,7 @@ class HomeViewModel(
         }
     }
 
-    fun getLocation(context: Context) {
+    fun getLocationByGps(context: Context) {
         gps.getLastLocation()
         gps.data.observe(context as LifecycleOwner, Observer {
             viewModelScope.launch(Dispatchers.IO) {
@@ -49,6 +46,29 @@ class HomeViewModel(
                 "metric"
             )
         })
+    }
+
+    fun getLocationByMaps(){
+        maps.fetchLocation()
+        maps.data.observe(context as LifecycleOwner, Observer {
+            viewModelScope.launch(Dispatchers.IO) {
+                _lon_lat.postValue(LongitudeAndLatitude(it.longitude, it.latitude))
+            }
+            getRemoteWeather(
+                it.latitude,
+                it.longitude,
+                "en",
+                "8beb73e4a526e79ac6ebf8f114f7ee43",
+                "metric"
+            )
+        })
+
+        maps.address.observe(context as LifecycleOwner, Observer {
+            viewModelScope.launch(Dispatchers.IO){
+                _address.postValue(it)
+            }
+        })
+
     }
 
     /*fun addCurrentWeather(product: Product){
