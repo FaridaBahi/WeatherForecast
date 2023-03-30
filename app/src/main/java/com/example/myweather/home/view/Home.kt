@@ -21,6 +21,7 @@ import com.example.myweather.home.viewmodel.HomeViewModel
 import com.example.myweather.home.viewmodel.HomeViewModelFactory
 import com.example.myweather.locations.GpsLocation
 import com.example.myweather.locations.MapsActivity
+import com.example.myweather.model.Constants
 import com.example.myweather.model.Repository
 import com.example.myweather.network.WeatherClient
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -82,8 +83,7 @@ class Home : Fragment(){
             if (it != null){
                 binding.tempTvHome.text= "${it.current.temp.toInt().toString()} °C"
                 binding.dateTvHome.text= getCurrentDay(it.current.dt.toInt())
-                //binding.descriptionHomeTv.text= it.current.weather[0].description.toString()
-                //println("Description: ${it.current.weather[0].description}")
+                binding.descriptionHomeTv.text= it.current.weather[0].description
                 when(it.current.weather[0].icon){
                     "01n" -> binding.imageView.setImageResource(R.drawable.monn)
                     "01d" -> binding.imageView.setImageResource(R.drawable.sunny)
@@ -93,7 +93,6 @@ class Home : Fragment(){
                             .load("https://openweathermap.org/img/wn/${it.current.weather[0].icon}@2x.png")
                             .into(binding.imageView)
                 }
-                println("Current: ${it.current.weather[0].icon}")
                 binding.cloudsTv.text= it.current.clouds.toString()
                 binding.pressureTv.text= it.current.pressure.toString()
                 binding.ultraTv.text= it.current.uvi.toString()
