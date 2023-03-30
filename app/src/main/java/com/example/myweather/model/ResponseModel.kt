@@ -33,19 +33,9 @@ data class Current (
 data class Weather (
     val id: Long,
     val main: Main,
-    val description: Description,
+    val description: String,
     val icon: String
 )
-
-enum class Description {
-    BrokenClouds,
-    ClearSky,
-    FewClouds,
-    LightRain,
-    ModerateRain,
-    OvercastClouds,
-    ScatteredClouds
-}
 
 enum class Main {
     Clear,

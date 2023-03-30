@@ -38,7 +38,7 @@ class HomeDailyAdapter(var context: Context, var dailyList: List<Daily>)
             .into(holder.binding.iconDailyItem)
         }
 
-        //holder.binding.descriptionDailyItemTv.text = day.weather[0].description.toString()
+        holder.binding.descriptionDailyItemTv.text = day.weather[0].description
        holder.binding.tempDailyItem.text= "${day.temp.min.toInt()}/${day.temp.max.toInt()}°C"
     }
 
