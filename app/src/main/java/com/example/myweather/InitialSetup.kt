@@ -1,18 +1,17 @@
 package com.example.myweather
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.myweather.locations.MapsActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class IntialSetup : Fragment() {
+class InitialSetup : Fragment() {
 
     val itemList = arrayOf("Gps", "Map")
 
@@ -46,13 +45,26 @@ class IntialSetup : Fragment() {
                 selectedFruits = location[which]
             }
             .setPositiveButton("Ok") { dialog, which ->
-                if (selectedFruits.equals("GPS")) {
+                if (selectedFruits == "GPS") {
+                    val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
+                    var editor = sharedPreference?.edit()
+                    editor?.putString("location","gps")
+                    editor?.commit()
+
                     val action =
-                        IntialSetupDirections.actionIntialSetupToHome()
+                        InitialSetupDirections.actionIntialSetupToHome()
                     findNavController().navigate(action)
 
                 }else{
-                    startActivity(Intent(requireContext(), MapsActivity::class.java))
+                    val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
+                    var editor = sharedPreference?.edit()
+                    editor?.putString("location","maps")
+                    editor?.commit()
+
+                    val action=
+                        InitialSetupDirections.actionIntialSetupToMapsFragment()
+                    findNavController().navigate(action)
+                    //startActivity(Intent(requireContext(), MapsActivity::class.java))
                 }
                 Toast.makeText(requireActivity(), "$selectedFruits Selected", Toast.LENGTH_SHORT)
                     .show()

@@ -1,19 +1,17 @@
 package com.example.myweather.locations
 
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.myweather.R
 import com.example.myweather.databinding.ActivityMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -23,7 +21,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+/*class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -71,7 +70,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (it != null){
                 currentLocation= it
                 val mapFragment = supportFragmentManager
-                    .findFragmentById(R.id.map) as SupportMapFragment
+                    .findFragmentById(com.example.myweather.R.id.mapFragment) as SupportMapFragment
                 mapFragment.getMapAsync(this)
             }
         }
@@ -88,6 +87,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 //if (currentMarker != null){currentMarker?.remove()}
                 val newLatLng= LatLng(p0.latitude, p0.longitude)
                 drawMarker(newLatLng)
+                binding.mapButton.visibility= View.VISIBLE
+                binding.mapButton.setOnClickListener {
+                    _data.postValue(newLatLng)
+                    //findNavController( com.example.myweather.R.id.nav_graph).navigate(MapsActivityDirections.actionMapsActivityToHome())
+                    /*startActivity(Intent(this, MainActivity::class.java))
+                    val navController: NavController =
+                        Navigation.findNavController(MainActivity(), com.example.myweather.R.id.nav_graph)
+                    navController.navigateUp()
+                    navController.navigate(com.example.myweather.R.id.home)*/
+                }
             }
 
         })
@@ -138,4 +147,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         _address.postValue(address?.get(0)?.getAddressLine(0))
         return address?.get(0)?.getAddressLine(0)
     }
-}
+}*/
