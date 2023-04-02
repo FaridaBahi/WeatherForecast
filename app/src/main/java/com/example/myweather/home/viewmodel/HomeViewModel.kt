@@ -3,7 +3,7 @@ package com.example.myweather.home.viewmodel
 import android.content.Context
 import androidx.lifecycle.*
 import com.example.myweather.locations.GpsLocation
-import com.example.myweather.locations.MapsActivity
+import com.example.myweather.locations.MapsFragment
 import com.example.myweather.model.Current
 import com.example.myweather.model.RepositoryInterface
 import com.example.myweather.model.ResponseModel
@@ -14,7 +14,7 @@ class HomeViewModel(
     private val repo: RepositoryInterface,
     val context: Context,
     val gps: GpsLocation,
-    val maps: MapsActivity
+    val maps: MapsFragment
 ) : ViewModel() {
     private var _current: MutableLiveData<ResponseModel> = MutableLiveData<ResponseModel>()
     val current: LiveData<ResponseModel> = _current
@@ -49,7 +49,7 @@ class HomeViewModel(
     }
 
     fun getLocationByMaps(){
-        maps.fetchLocation()
+        //maps.mapInitialize()
         maps.data.observe(context as LifecycleOwner, Observer {
             viewModelScope.launch(Dispatchers.IO) {
                 _lon_lat.postValue(LongitudeAndLatitude(it.longitude, it.latitude))
@@ -63,7 +63,7 @@ class HomeViewModel(
             )
         })
 
-        maps.address.observe(context as LifecycleOwner, Observer {
+       maps.address.observe(context as LifecycleOwner, Observer {
             viewModelScope.launch(Dispatchers.IO){
                 _address.postValue(it)
             }

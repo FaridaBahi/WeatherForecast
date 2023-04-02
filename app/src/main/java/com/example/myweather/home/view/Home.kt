@@ -1,30 +1,27 @@
 package com.example.myweather.home.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.myweather.R
-import com.example.myweather.SendLocation
 import com.example.myweather.databinding.FragmentHomeBinding
 import com.example.myweather.home.viewmodel.HomeViewModel
 import com.example.myweather.home.viewmodel.HomeViewModelFactory
 import com.example.myweather.locations.GpsLocation
-import com.example.myweather.locations.MapsActivity
-import com.example.myweather.model.Constants
+import com.example.myweather.locations.MapsFragment
 import com.example.myweather.model.Repository
 import com.example.myweather.network.WeatherClient
-import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,8 +36,12 @@ class Home : Fragment(){
 
     lateinit var geocoder: Geocoder
     lateinit var gps: GpsLocation
-    lateinit var maps: MapsActivity
+    lateinit var maps: MapsFragment
     lateinit var addressList: MutableList<Address>
+
+    lateinit var locSharedPref: String
+    lateinit var windSharedPref: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,26 +57,31 @@ class Home : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         gps= GpsLocation(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
-        maps= MapsActivity()
+        maps= MapsFragment()
 
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(WeatherClient.getInstance()/*, ConcreteLocalDataSource(this)*/),
             requireContext(), gps, maps)
         viewModel = ViewModelProvider(this, homeFactory)[HomeViewModel::class.java]
 
-        /*while (sharedPerfernce){
-           maps -> viewModel.getLocationByMaps()
-            gps ->  viewModel.getLocationByGps(requireContext())
-            else -> notificataion
-        }*/
+        locSharedPref= activity?.getSharedPreferences(
+            "weatherApp", Context.MODE_PRIVATE)?.getString("location", "none").toString()
+        Log.i("TAG", "LocSahredPref: $locSharedPref")
+        when (locSharedPref){
+           "maps" -> viewModel.getLocationByMaps()
+            "gps" ->  viewModel.getLocationByGps(requireContext())
+            else -> Snackbar.make(view,"Choose Location type",
+                Snackbar.LENGTH_LONG).setActionTextColor(resources.getColor(R.color.light_blue))
+        }
 
-        viewModel.getLocationByGps(requireContext())
+        //viewModel.getLocationByGps(requireContext())
 
         //Get Address by GeoCoder
         viewModel.lon_lat.observe(viewLifecycleOwner){
             geocoder = Geocoder(requireContext(), Locale.getDefault())
             addressList= geocoder.getFromLocation(it.lon, it.lat, 1) as MutableList<Address>
             binding.locationTvHome.text= addressList[0].adminArea + " " + addressList[0].countryName
+            Log.i("TAG", "Address: ${addressList[0].countryName}")
         }
 
         //Display Data

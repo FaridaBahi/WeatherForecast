@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/intialSetup">
+    app:startDestination="@id/initialSetup">
 
     <fragment
         android:id="@+id/favourites"
@@ -36,20 +36,24 @@
             app:destination="@id/alert" />
     </fragment>
     <fragment
-        android:id="@+id/intialSetup"
-        android:name="com.example.myweather.IntialSetup"
-        android:label="fragment_intial_setup"
+        android:id="@+id/initialSetup"
+        android:name="com.example.myweather.InitialSetup"
+        android:label="Initial setup"
         tools:layout="@layout/fragment_intial_setup" >
         <action
             android:id="@+id/action_intialSetup_to_home"
             app:destination="@id/home" />
         <action
-            android:id="@+id/action_intialSetup_to_mapsActivity2"
-            app:destination="@id/mapsActivity" />
+            android:id="@+id/action_intialSetup_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
-    <activity
-        android:id="@+id/mapsActivity"
-        android:name="com.example.myweather.locations.MapsActivity"
-        android:label="activity_maps"
-        tools:layout="@layout/activity_maps" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.myweather.locations.MapsFragment"
+        android:label="Google Map"
+        tools:layout="@layout/fragment_maps">
+        <action
+            android:id="@+id/action_mapsFragment_to_home"
+            app:destination="@id/home" />
+    </fragment>
 </navigation>
