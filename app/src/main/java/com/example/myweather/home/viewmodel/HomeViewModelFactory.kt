@@ -11,11 +11,10 @@ class HomeViewModelFactory(
     val repo: RepositoryInterface,
     val context: Context,
     val gps: GpsLocation,
-    val maps: MapsFragment
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            HomeViewModel(repo, context, gps, maps) as T
+            HomeViewModel(repo, context, gps) as T
         } else {
             throw java.lang.IllegalArgumentException("Home View Model class is not found")
         }

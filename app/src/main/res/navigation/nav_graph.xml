@@ -34,6 +34,14 @@
         <action
             android:id="@+id/action_home4_to_alert"
             app:destination="@id/alert" />
+        <argument
+            android:name="Longitude"
+            app:argType="float"
+            android:defaultValue="1.2"/>
+        <argument
+            android:name="Latitude"
+            app:argType="float"
+            android:defaultValue="1.2"/>
     </fragment>
     <fragment
         android:id="@+id/initialSetup"

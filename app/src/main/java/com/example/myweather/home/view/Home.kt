@@ -9,8 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.myweather.R
@@ -34,10 +36,7 @@ class Home : Fragment(){
     lateinit var binding: FragmentHomeBinding
     //31.217293724615672 //29.960048284658562
 
-    lateinit var geocoder: Geocoder
     lateinit var gps: GpsLocation
-    lateinit var maps: MapsFragment
-    lateinit var addressList: MutableList<Address>
 
     lateinit var locSharedPref: String
     lateinit var windSharedPref: String
@@ -56,35 +55,33 @@ class Home : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         gps= GpsLocation(requireContext())
-        geocoder = Geocoder(requireContext(), Locale.getDefault())
-        maps= MapsFragment()
+
+        val args: HomeArgs by navArgs()
+        var longitude= args.Longitude.toDouble()
+        var latitude= args.Latitude.toDouble()
 
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(WeatherClient.getInstance()/*, ConcreteLocalDataSource(this)*/),
-            requireContext(), gps, maps)
+            requireContext(), gps)
         viewModel = ViewModelProvider(this, homeFactory)[HomeViewModel::class.java]
 
         locSharedPref= activity?.getSharedPreferences(
             "weatherApp", Context.MODE_PRIVATE)?.getString("location", "none").toString()
-        Log.i("TAG", "LocSahredPref: $locSharedPref")
-        when (locSharedPref){
-           "maps" -> viewModel.getLocationByMaps()
+        Log.i("TAG", "LocSharedPref: $locSharedPref")
+       when (locSharedPref){
+           "maps" -> viewModel.getRemoteWeather(latitude,longitude)
             "gps" ->  viewModel.getLocationByGps(requireContext())
             else -> Snackbar.make(view,"Choose Location type",
                 Snackbar.LENGTH_LONG).setActionTextColor(resources.getColor(R.color.light_blue))
         }
 
-        //viewModel.getLocationByGps(requireContext())
-
-        //Get Address by GeoCoder
-        viewModel.lon_lat.observe(viewLifecycleOwner){
-            geocoder = Geocoder(requireContext(), Locale.getDefault())
-            addressList= geocoder.getFromLocation(it.lon, it.lat, 1) as MutableList<Address>
-            binding.locationTvHome.text= addressList[0].adminArea + " " + addressList[0].countryName
-            Log.i("TAG", "Address: ${addressList[0].countryName}")
+        //Get Address
+        viewModel.address.observe(viewLifecycleOwner){
+            Log.i("TAG", "Addressss: $it")
+            binding.locationTvHome.text= it
         }
 
-        //Display Data
+        //Display Weather Data
         viewModel.current.observe(viewLifecycleOwner){
             if (it != null){
                 binding.tempTvHome.text= "${it.current.temp.toInt().toString()} °C"

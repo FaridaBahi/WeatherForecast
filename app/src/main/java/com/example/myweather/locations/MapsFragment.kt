@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.myweather.R
 import com.example.myweather.databinding.FragmentMapsBinding
+import com.example.myweather.home.viewmodel.HomeViewModel
+import com.example.myweather.home.viewmodel.HomeViewModelFactory
+import com.example.myweather.model.Repository
+import com.example.myweather.network.WeatherClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -75,10 +78,13 @@ class MapsFragment : Fragment(){
     private lateinit var binding: FragmentMapsBinding
     private lateinit var fusedClient: FusedLocationProviderClient
 
-    private var _data: MutableLiveData<LatLng> = MutableLiveData<LatLng>()
+   /* private var _data: MutableLiveData<LatLng> = MutableLiveData<LatLng>()
     val data: LiveData<LatLng> = _data
     private var _address: MutableLiveData<String> = MutableLiveData()
-    val address: LiveData<String> = _address
+    val address: LiveData<String> = _address*/
+
+    lateinit var homeFactory: HomeViewModelFactory
+    lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -90,6 +96,16 @@ class MapsFragment : Fragment(){
         mapFragment?.getMapAsync(callback)
         mapInitialize()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val gps= GpsLocation(requireContext())
+
+        homeFactory = HomeViewModelFactory(
+            Repository.getInstance(WeatherClient.getInstance()/*, ConcreteLocalDataSource(this)*/),
+            requireContext(), gps)
+        viewModel = ViewModelProvider(this, homeFactory)[HomeViewModel::class.java]
     }
 
     private fun mapInitialize() {
@@ -133,12 +149,9 @@ class MapsFragment : Fragment(){
     private fun getAddress(lat: Double, Lon: Double): String? {
         val geoCoder = Geocoder(requireContext(), Locale.getDefault())
         val address = geoCoder.getFromLocation(lat, Lon, 1)
-       // _data.postValue(LatLng(lat, Lon))
-        _address.postValue(address?.get(0)?.getAddressLine(0))
         binding.mapButton.visibility= View.VISIBLE
         binding.mapButton.setOnClickListener {
-            _data.postValue(LatLng(lat, Lon))
-            findNavController().navigate(MapsFragmentDirections.actionMapsFragmentToHome())
+            findNavController().navigate(MapsFragmentDirections.actionMapsFragmentToHome(Lon.toFloat(), lat.toFloat()))
         }
         return address?.get(0)?.getAddressLine(0)
     }
