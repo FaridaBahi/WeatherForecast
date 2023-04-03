@@ -21,15 +21,15 @@ class WeatherClient : RemoteSource {
         }
     }
 
-    override suspend fun getCurrentWeather(lat:Double, lon:Double, lang:String,appid:String,units:String): ResponseModel? {
+    override suspend fun getCurrentWeather(lat:Double, lon:Double, lang:String,units:String,appid:String): ResponseModel? {
       return api.getWeather(lat, lon, lang, appid,units).body()
     }
 
-    override suspend fun getHourlyWeather(lat:Double, lon:Double, lang:String,appid:String,units:String): List<Current>? {
+   /* override suspend fun getHourlyWeather(lat:Double, lon:Double, lang:String,appid:String,units:String): List<Current>? {
         return api.getWeather(lat, lon, lang, appid,units).body()?.hourly
     }
 
     override suspend fun getDailyWeather(lat:Double, lon:Double, lang:String,appid:String,units:String): List<Daily>? {
         return api.getWeather(lat, lon, lang, appid,units).body()?.daily
-    }
+    }*/
 }

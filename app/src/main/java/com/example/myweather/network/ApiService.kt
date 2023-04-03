@@ -13,8 +13,8 @@ interface ApiService {
         @Query("lat") lat:Double,
         @Query("lon") lon:Double,
         @Query("lang") lang:String,
-        @Query("appid") appid:String,
-        @Query("units") units:String
+        @Query("units") units:String,
+        @Query("appid") appid:String
     ) : Response<ResponseModel>
 }
 

@@ -21,13 +21,13 @@ class Repository private constructor(var remoteSource: RemoteSource, /*var local
         lat: Double,
         lon: Double,
         lang: String,
-        appid: String,
-        units: String
+        units: String,
+        appid: String
     ): ResponseModel? {
         return remoteSource.getCurrentWeather(lat, lon, lang, appid, units)
     }
 
-    override suspend fun getHourlyWeather(
+   /* override suspend fun getHourlyWeather(
         lat: Double,
         lon: Double,
         lang: String,
@@ -45,5 +45,5 @@ class Repository private constructor(var remoteSource: RemoteSource, /*var local
         units: String
     ): List<Daily>? {
        return remoteSource.getDailyWeather(lat, lon, lang, appid, units)
-    }
+    }*/
 }

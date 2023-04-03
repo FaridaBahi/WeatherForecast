@@ -27,7 +27,7 @@ class GpsLocation(val context: Context) {
     val data: LiveData<LatLng> = _data
 
     @SuppressLint("MissingPermission")
-    private fun requestNewLocationDate(){
+    private fun requestNewLocationData(){
         val mLocationRequest = com.google.android.gms.location.LocationRequest()
         mLocationRequest.setPriority(com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY)
         mLocationRequest.setInterval(0)
@@ -88,7 +88,7 @@ class GpsLocation(val context: Context) {
     fun getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                requestNewLocationDate()
+                requestNewLocationData()
 
             } else {
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -96,6 +96,12 @@ class GpsLocation(val context: Context) {
             }
         } else {
             requestPermissions()
+
+            if (checkPermissions()) {
+                if (isLocationEnabled()) {
+                    requestNewLocationData()
+                }
+            }
         }
     }
 }
