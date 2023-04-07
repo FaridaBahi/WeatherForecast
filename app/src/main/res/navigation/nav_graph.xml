@@ -46,6 +46,9 @@
             android:name="Latitude"
             android:defaultValue="1.2"
             app:argType="float" />
+        <action
+            android:id="@+id/action_home_self"
+            app:destination="@id/home" />
     </fragment>
     <fragment
         android:id="@+id/initialSetup"

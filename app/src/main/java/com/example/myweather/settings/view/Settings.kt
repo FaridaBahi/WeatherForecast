@@ -80,11 +80,7 @@ class Settings : Fragment() {
             editor?.putString("language","ar")
             editor?.commit()
 
-            val locale = Locale("ar")
-            Locale.setDefault(locale)
-            val config= Configuration()
-            config.locale= locale
-            resources.updateConfiguration(config,resources.displayMetrics)
+            localization("ar")
         }
 
         binding.englishRadioButton.setOnClickListener {
@@ -93,11 +89,7 @@ class Settings : Fragment() {
             editor?.putString("language","en")
             editor?.commit()
 
-            val locale = Locale("en")
-            Locale.setDefault(locale)
-            val config= Configuration()
-            config.locale= locale
-            resources.updateConfiguration(config,resources.displayMetrics)
+            localization("en")
         }
 
         binding.celsiusRadioButton.setOnClickListener {
@@ -138,5 +130,13 @@ class Settings : Fragment() {
             editor?.commit()
             binding.fahrenheitRadioButton.isChecked= true
         }
+    }
+
+    fun localization(lang : String){
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config= Configuration()
+        config.locale= locale
+        resources.updateConfiguration(config,resources.displayMetrics)
     }
 }
