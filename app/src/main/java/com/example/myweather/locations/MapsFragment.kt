@@ -3,6 +3,7 @@ package com.example.myweather.locations
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +12,13 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.myweather.R
+import com.example.myweather.database.ConcreteLocalSource
 import com.example.myweather.databinding.FragmentMapsBinding
 import com.example.myweather.home.viewmodel.HomeViewModel
 import com.example.myweather.home.viewmodel.HomeViewModelFactory
+import com.example.myweather.model.Favourite
 import com.example.myweather.model.Repository
 import com.example.myweather.network.WeatherClient
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -27,43 +31,6 @@ import java.util.*
 
 class MapsFragment : Fragment(){
 
-
-    /*private val callback = OnMapReadyCallback { googleMap ->
-        //mMap = googleMap
-
-        val latLon = LatLng(currentLocation.latitude, currentLocation.longitude)
-        drawMarker(latLon)
-        mMap.setOnMapClickListener (object :GoogleMap.OnMapClickListener{
-            override fun onMapClick(p0: LatLng) {
-                //currentMarker?.remove()
-                if (currentMarker != null){currentMarker?.remove()}
-                val newLatLng= LatLng(p0.latitude, p0.longitude)
-                drawMarker(newLatLng)
-                binding.mapButton.visibility= View.VISIBLE
-                binding.mapButton.setOnClickListener {
-                    _data.postValue(newLatLng)
-                    findNavController().navigate(MapsFragmentDirections.actionMapsFragmentToHome())
-                }
-            }
-
-        })
-        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener{
-            override fun onMarkerDrag(p0: Marker) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onMarkerDragEnd(p0: Marker) {
-                currentMarker?.remove()
-                //if (currentMarker != null){currentMarker?.remove()}
-                val newLatLng= LatLng(p0.position.latitude, p0.position.longitude)
-                drawMarker(newLatLng)
-            }
-
-            override fun onMarkerDragStart(p0: Marker) {
-                TODO("Not yet implemented")
-            }
-        })
-    }*/
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
         mMap.setOnMapClickListener {
@@ -77,11 +44,6 @@ class MapsFragment : Fragment(){
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapsBinding
     private lateinit var fusedClient: FusedLocationProviderClient
-
-   /* private var _data: MutableLiveData<LatLng> = MutableLiveData<LatLng>()
-    val data: LiveData<LatLng> = _data
-    private var _address: MutableLiveData<String> = MutableLiveData()
-    val address: LiveData<String> = _address*/
 
     lateinit var homeFactory: HomeViewModelFactory
     lateinit var viewModel: HomeViewModel
@@ -103,7 +65,7 @@ class MapsFragment : Fragment(){
         val gps= GpsLocation(requireContext())
 
         homeFactory = HomeViewModelFactory(
-            Repository.getInstance(WeatherClient.getInstance()/*, ConcreteLocalDataSource(this)*/),
+            Repository.getInstance(WeatherClient.getInstance(), ConcreteLocalSource(requireContext())),
             requireContext(), gps)
         viewModel = ViewModelProvider(this, homeFactory)[HomeViewModel::class.java]
     }
@@ -129,12 +91,9 @@ class MapsFragment : Fragment(){
         fusedClient = LocationServices.getFusedLocationProviderClient(requireContext())
     }
 
-    private fun goToLatLng(latitude: Double, longitude: Double/*, float: Float*/) {
+    private fun goToLatLng(latitude: Double, longitude: Double) {
         val latLng = LatLng(latitude, longitude)
-        //var update: CameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, float)
         drawMarker(latLng)
-        /*mMap.addMarker(MarkerOptions().position(latLng))
-        mMap.animateCamera(update)*/
     }
 
     private fun drawMarker(latLon: LatLng) {
@@ -149,95 +108,42 @@ class MapsFragment : Fragment(){
     private fun getAddress(lat: Double, Lon: Double): String? {
         val geoCoder = Geocoder(requireContext(), Locale.getDefault())
         val address = geoCoder.getFromLocation(lat, Lon, 1)
+        val args: MapsFragmentArgs by navArgs()
         binding.mapButton.visibility= View.VISIBLE
         binding.mapButton.setOnClickListener {
-            findNavController().navigate(MapsFragmentDirections.actionMapsFragmentToHome(Lon.toFloat(), lat.toFloat()))
+            binding.mapButton.animate().apply {
+                duration= 1000
+                rotationYBy(360f)
+            }.withEndAction{
+                if (args.fromFavourite == "favourite"){
+                    var title = ""
+                    binding.mapButton.text = "Save"
+                    try {
+                        title= address?.get(0)?.adminArea + " " + address?.get(0)?.countryName
+                    }catch (e: Exception){
+                        Log.i("TAG", "getAddress: Cant  get addres")
+                    }
+                    findNavController().navigate(MapsFragmentDirections.
+                    actionMapsFragmentToFavourites(Lon.toFloat(), lat.toFloat(), title))
+                }else{
+                    findNavController().
+                    navigate(MapsFragmentDirections.actionMapsFragmentToHome(Lon.toFloat(), lat.toFloat()))
+                }
+            }.start()
         }
         return address?.get(0)?.getAddressLine(0)
     }
 
     private fun goToSearchedLocation() {
-        var requiredAddress = binding.mapSearch.text.toString()
-        var list = Geocoder(requireContext()).getFromLocationName(requiredAddress,1)
-        if (list!= null && list.size>0){
-            val addresss: Address = list[0]
-            goToLatLng(addresss.latitude,addresss.longitude)
+        try {
+            val requiredAddress = binding.mapSearch.text.toString()
+            val list = Geocoder(requireContext()).getFromLocationName(requiredAddress,1)
+            if (list!= null && list.size>0){
+                val addresss: Address = list[0]
+                goToLatLng(addresss.latitude,addresss.longitude)
+            }
+        }catch (e: Exception){
+            Log.e("MAP", "goToSearchedLocation: ${e.message}" )
         }
     }
-
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        /*  val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-          mapFragment?.getMapAsync(callback)*/
-
-        //fusedClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        //fetchLocation()
-    }*/
-
-
-/* fun fetchLocation() {
-     if (ActivityCompat.checkSelfPermission(
-             requireContext(),
-             Manifest.permission.ACCESS_FINE_LOCATION
-         ) != PackageManager.PERMISSION_GRANTED
-         && ActivityCompat.checkSelfPermission(
-             requireContext(),
-             Manifest.permission.ACCESS_COARSE_LOCATION
-         ) != PackageManager.PERMISSION_GRANTED
-     ) {
-         ActivityCompat.requestPermissions(
-             requireActivity(),
-             arrayOf(
-                 Manifest.permission.ACCESS_FINE_LOCATION,
-                 Manifest.permission.ACCESS_COARSE_LOCATION
-             ), 1000
-         )
-         return
-     }
-
-     val task = fusedClient.lastLocation
-     task.addOnSuccessListener {
-         if (it != null){
-             currentLocation= it
-             val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-             mapFragment?.getMapAsync(this)
-         }
-     }
- }*/
-
-   /* override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            1000 -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                fetchLocation()
-            }
-        }
-    }*/
-
-
-   /* override fun onMapReady(p0: GoogleMap) {
-        mMap = p0
-        //fetchLocation()
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        fusedClient.lastLocation.addOnFailureListener {
-            Log.e("Map", "onMapFailure: ${it.message}")
-        }.addOnSuccessListener {
-            val latling = LatLng(it.latitude, it.longitude)
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latling, 17F))
-        }
-
-    }*/
 }

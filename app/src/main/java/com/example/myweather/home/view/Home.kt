@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -101,12 +100,17 @@ class Home : Fragment() {
             }
 
             //Set Weather Response
-            viewModel.current.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    viewModel.deleteCurrentWeather()
-                    viewModel.addCurrentWeather(it)
-                    setData(it)
+            try{
+                viewModel.current.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        viewModel.deleteCurrentWeather()
+                        viewModel.addCurrentWeather(it)
+                        setData(it)
+                    }
                 }
+
+            }catch (e: Exception){
+                Log.i("TAG", "Home onViewCreated: ${e.message}")
             }
 
         } else {
@@ -124,14 +128,6 @@ class Home : Fragment() {
         }
 
         binding.swipeRefresh.setOnRefreshListener {
-            // activity?.recreate()
-            /*val ft: FragmentTransaction = requireFragmentManager().beginTransaction()
-            ft.detach(this).attach(this).commit()*/
-            //parentFragmentManager?.beginTransaction()?.detach(this)?.attach(this)?.commit()
-            //onCreate(Bundle())
-            //onDestroy()
-            //onAttach(requireContext())
-            //ActivityCompat.recreate()
             findNavController().navigate(HomeDirections.actionHomeSelf())
             binding.swipeRefresh.isRefreshing = false
         }

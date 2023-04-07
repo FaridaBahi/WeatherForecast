@@ -34,13 +34,6 @@ class HomeViewModel(
     fun getRemoteWeather(lat: Double, lon: Double, lang: String= "en", units: String= "standard", appid: String= "8beb73e4a526e79ac6ebf8f114f7ee43") {
         viewModelScope.launch(Dispatchers.IO) {
             _current.postValue(repo.getCurrentWeather(lat, lon, lang, units, appid))
-            val geocoder = Geocoder(context, Locale.getDefault())
-            try {
-                val addressList= geocoder.getFromLocation(lon, lat, 1) as MutableList<Address>
-                _address.postValue(addressList[0].adminArea + " " + addressList[0].countryName)
-            }catch (e: Exception){
-                Log.e("VM", "getRemoteWeather: ${e.message}")
-            }
         }
     }
 
