@@ -1,5 +1,6 @@
 package com.example.myweather.home.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.myweather.R
 import com.example.myweather.databinding.DailyItemBinding
 import com.example.myweather.databinding.HourlyItemBinding
+import com.example.myweather.model.Constants
 import com.example.myweather.model.Current
 import com.example.myweather.model.Daily
 import java.text.SimpleDateFormat
@@ -20,19 +22,25 @@ class HomeHourlyAdapter(var context: Context, var hourlyList: List<Current>)
     : RecyclerView.Adapter<HomeHourlyAdapter.HourlyViewHolder>() {
 
     lateinit var binding: HourlyItemBinding
+    var tempSharedPref= context.getSharedPreferences(
+    "weatherApp", Context.MODE_PRIVATE)?.getString("temp", "°C").toString()
+    var degree: String= ""
 
     class HourlyViewHolder( var binding: HourlyItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
+        tempDegree(tempSharedPref)
+
         val inflater: LayoutInflater =
             parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = HourlyItemBinding.inflate(inflater, parent, false)
         return HourlyViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
         val hour: Current= hourlyList[position]
-        holder.binding.tempHourlyItem.text= hour.temp.toInt().toString() + "°C"
+        holder.binding.tempHourlyItem.text= hour.temp.toInt().toString() + degree
         holder.binding.hourTv.text= getCurrentTime(hour.dt.toInt()) + "00"
         when(hour.weather[0].icon){
             "01n" -> holder.binding.iconHourlyItem.setImageResource(R.drawable.monn)
@@ -49,10 +57,20 @@ class HomeHourlyAdapter(var context: Context, var hourlyList: List<Current>)
     }
 
     private fun getCurrentTime(dt: Int): String {
-        var date= Date(dt*1000L)
-        var sdf= SimpleDateFormat("hh:mm a")
+        val date= Date(dt*1000L)
+        val sdf= SimpleDateFormat("hh:mm a")
         sdf.timeZone= TimeZone.getDefault()
         return sdf.format(date)
 
+    }
+
+    fun tempDegree(tempShP: String){
+        degree =
+            when (tempSharedPref) {
+                "metric" -> Constants.Celsius
+                "standard" -> Constants.Kelvin
+                "imperial" -> Constants.Fahrenheit
+                else -> ""
+            }
     }
 }

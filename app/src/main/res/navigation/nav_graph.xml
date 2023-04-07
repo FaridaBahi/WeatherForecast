@@ -9,7 +9,26 @@
         android:id="@+id/favourites"
         android:name="com.example.myweather.favourites.view.Favourites"
         android:label="@string/favourites"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/action_favourites_to_home"
+            app:destination="@id/home" />
+        <action
+            android:id="@+id/action_favourites_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <argument
+            android:name="Longitude"
+            android:defaultValue="1.2"
+            app:argType="float" />
+        <argument
+            android:name="Latitude"
+            android:defaultValue="1.2"
+            app:argType="float" />
+        <argument
+            android:name="title"
+            android:defaultValue="none"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/settings"
         android:name="com.example.myweather.settings.view.Settings"
@@ -70,5 +89,12 @@
         <action
             android:id="@+id/action_mapsFragment_to_home"
             app:destination="@id/home" />
+        <action
+            android:id="@+id/action_mapsFragment_to_favourites"
+            app:destination="@id/favourites" />
+        <argument
+            android:name="fromFavourite"
+            app:argType="string"
+            android:defaultValue="none" />
     </fragment>
 </navigation>

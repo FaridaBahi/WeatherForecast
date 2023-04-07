@@ -31,12 +31,12 @@
             android:id="@+id/map_button"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Done"
             android:layout_weight="0.5"
+            android:text="Done"
             android:textColor="@color/white_used"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:visibility="invisible"/> />
+            android:visibility="invisible" /> />
 
     </LinearLayout>
 
