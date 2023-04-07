@@ -15,4 +15,17 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="pressure" translatable="false">Pressure</string>
+    <string name="zone" translatable="false">Zone</string>
+    <string name="visibility" translatable="false">Visibility</string>
+    <string name="uv" translatable="false">Ultra Violet</string>
+    <string name="clouds" translatable="false">Clouds</string>
+    <string name="wind" translatable="false">Wind</string>
+    <string name="humidity" translatable="false">Humidity</string>
+    <string name="initial_setup" translatable="false">Initial Setup</string>
+    <string name="home" translatable="false">Home</string>
+    <string name="map" translatable="false">Google Map</string>
+    <string name="settings" translatable="false">Settings</string>
+    <string name="favourites" translatable="false">Favourites</string>
+    <string name="alerts" translatable="false">Alerts</string>
 </resources>

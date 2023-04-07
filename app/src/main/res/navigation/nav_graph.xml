@@ -8,22 +8,26 @@
     <fragment
         android:id="@+id/favourites"
         android:name="com.example.myweather.favourites.view.Favourites"
-        android:label="Favourites"
+        android:label="@string/favourites"
         tools:layout="@layout/fragment_favourites" />
     <fragment
         android:id="@+id/settings"
         android:name="com.example.myweather.settings.view.Settings"
-        android:label="Settings"
-        tools:layout="@layout/fragment_settings" />
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settings_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/alert"
         android:name="com.example.myweather.alerts.view.Alert"
-        android:label="Alerts"
+        android:label="@string/alerts"
         tools:layout="@layout/fragment_alert" />
     <fragment
         android:id="@+id/home"
         android:name="com.example.myweather.home.view.Home"
-        android:label="Home"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home4_to_settings"
@@ -36,18 +40,18 @@
             app:destination="@id/alert" />
         <argument
             android:name="Longitude"
-            app:argType="float"
-            android:defaultValue="1.2"/>
+            android:defaultValue="1.2"
+            app:argType="float" />
         <argument
             android:name="Latitude"
-            app:argType="float"
-            android:defaultValue="1.2"/>
+            android:defaultValue="1.2"
+            app:argType="float" />
     </fragment>
     <fragment
         android:id="@+id/initialSetup"
         android:name="com.example.myweather.InitialSetup"
-        android:label="Initial setup"
-        tools:layout="@layout/fragment_intial_setup" >
+        android:label="@string/initial_setup"
+        tools:layout="@layout/fragment_intial_setup">
         <action
             android:id="@+id/action_intialSetup_to_home"
             app:destination="@id/home" />
@@ -58,7 +62,7 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.myweather.locations.MapsFragment"
-        android:label="Google Map"
+        android:label="@string/map"
         tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_home"
