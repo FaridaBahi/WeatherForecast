@@ -1,6 +1,7 @@
 package com.example.myweather
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 
 class InitialSetup : Fragment() {
 
@@ -19,7 +21,6 @@ class InitialSetup : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showDialog()
-
     }
 
 
@@ -69,5 +70,26 @@ class InitialSetup : Fragment() {
                 dialog.dismiss()
             }
             .show()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val langharedPref = activity?.getSharedPreferences(
+            "weatherApp", Context.MODE_PRIVATE
+        )?.getString("language", "standard").toString()
+
+        when(langharedPref){
+            "en" ->  localization("en")
+            "ar" ->  localization("ar")
+        }
+    }
+
+    fun localization(lang : String){
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config= Configuration()
+        config.locale= locale
+        resources.updateConfiguration(config,resources.displayMetrics)
     }
 }

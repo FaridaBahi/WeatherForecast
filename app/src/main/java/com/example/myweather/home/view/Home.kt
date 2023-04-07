@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -93,11 +94,11 @@ class Home : Fragment() {
             }
 
             //Set Address
-            /*viewModel.address.observe(viewLifecycleOwner) {
+            viewModel.address.observe(viewLifecycleOwner) {
                 if (it.isNotEmpty()) {
                     address= it
                 }
-            }*/
+            }
 
             //Set Weather Response
             viewModel.current.observe(viewLifecycleOwner) {
@@ -112,7 +113,7 @@ class Home : Fragment() {
             Toast.makeText(requireContext(), "Disconnected", Toast.LENGTH_SHORT).show()
             Snackbar.make(
                 view, "No Internet",
-                Snackbar.LENGTH_LONG
+                Snackbar.LENGTH_INDEFINITE
             ).setActionTextColor(resources.getColor(R.color.light_blue)).show()
             viewModel.getCurrentWeather()
             viewModel.current.observe(viewLifecycleOwner){
@@ -131,6 +132,7 @@ class Home : Fragment() {
             //onDestroy()
             //onAttach(requireContext())
             //ActivityCompat.recreate()
+            findNavController().navigate(HomeDirections.actionHomeSelf())
             binding.swipeRefresh.isRefreshing = false
         }
     }
