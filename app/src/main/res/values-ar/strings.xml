@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الطقس</string>
+    <string name="pressure">الضغط</string>
+    <string name="zone">المنطقة</string>
+    <string name="visibility">الرؤية</string>
+    <string name="uv">الاشعة فوف البنفسجية</string>
+    <string name="clouds">السحب</string>
+    <string name="wind">الرياح</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="initial_setup">الاعداد الاولي</string>
+    <string name="home">الصفحة الرئيسية</string>
+    <string name="map">الخريطة</string>
+    <string name="settings">الاعدادات</string>
+    <string name="favourites">المفضلات</string>
+    <string name="alerts">التنبيهات</string>
+</resources>

@@ -8,13 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.parcelize.Parcelize
 
 class InitialSetup : Fragment() {
-
-    val itemList = arrayOf("Gps", "Map")
 
     private var selectedLocationIndex: Int = 0
     private val location = arrayOf("GPS", "Map")
@@ -22,7 +18,7 @@ class InitialSetup : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showDailog()
+        showDialog()
 
     }
 
@@ -36,21 +32,21 @@ class InitialSetup : Fragment() {
     }
 
 
-    fun showDailog() {
+    private fun showDialog() {
 
         var selectedFruits = location[selectedLocationIndex]
         MaterialAlertDialogBuilder(requireActivity())
             .setTitle("Please, Choose your location ")
-            .setSingleChoiceItems(location, selectedLocationIndex) { dialog_, which ->
+            .setSingleChoiceItems(location, selectedLocationIndex) { _, which ->
                 selectedLocationIndex = which
                 selectedFruits = location[which]
             }
-            .setPositiveButton("Ok") { dialog, which ->
+            .setPositiveButton("Ok") { _, _ ->
                 if (selectedFruits == "GPS") {
                     val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-                    var editor = sharedPreference?.edit()
+                    val editor = sharedPreference?.edit()
                     editor?.putString("location","gps")
-                    editor?.commit()
+                    editor?.apply()
 
                     val action =
                         InitialSetupDirections.actionIntialSetupToHome()
@@ -58,19 +54,18 @@ class InitialSetup : Fragment() {
 
                 }else{
                     val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-                    var editor = sharedPreference?.edit()
+                    val editor = sharedPreference?.edit()
                     editor?.putString("location","maps")
-                    editor?.commit()
+                    editor?.apply()
 
                     val action=
                         InitialSetupDirections.actionIntialSetupToMapsFragment()
                     findNavController().navigate(action)
-                    //startActivity(Intent(requireContext(), MapsActivity::class.java))
                 }
                 Toast.makeText(requireActivity(), "$selectedFruits Selected", Toast.LENGTH_SHORT)
                     .show()
             }
-            .setNegativeButton("Cancel") { dialog, which ->
+            .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()

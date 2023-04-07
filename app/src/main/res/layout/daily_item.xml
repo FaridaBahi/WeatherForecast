@@ -39,10 +39,10 @@
         <TextView
             android:id="@+id/description_daily_item_tv"
             android:layout_width="99dp"
-            android:layout_height="35dp"
+            android:layout_height="39dp"
             android:layout_marginStart="10dp"
             android:textColor="@color/white_used"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@+id/icon_daily_item"
             app:layout_constraintStart_toEndOf="@+id/icon_daily_item"

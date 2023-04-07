@@ -1,5 +1,6 @@
 package com.example.myweather.home.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class HomeDailyAdapter(var context: Context, var dailyList: List<Daily>)
         return DailyViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: DailyViewHolder, position: Int) {
         val day: Daily= dailyList[position]
         holder.binding.dayDailyItemTv.text= getCurrentDay(day.dt.toInt())
@@ -39,7 +41,7 @@ class HomeDailyAdapter(var context: Context, var dailyList: List<Daily>)
         }
 
         holder.binding.descriptionDailyItemTv.text = day.weather[0].description
-       holder.binding.tempDailyItem.text= "${day.temp.min.toInt()}/${day.temp.max.toInt()}°C"
+       holder.binding.tempDailyItem.text= "${day.temp?.min?.toInt()}/${day.temp?.max?.toInt()}°C"
     }
 
     override fun getItemCount(): Int {
