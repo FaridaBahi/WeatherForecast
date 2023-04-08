@@ -75,17 +75,17 @@ class InitialSetup : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val langharedPref = activity?.getSharedPreferences(
+        val langSharedPref = activity?.getSharedPreferences(
             "weatherApp", Context.MODE_PRIVATE
-        )?.getString("language", "standard").toString()
+        )?.getString("language", "en").toString()
 
-        when(langharedPref){
+        when(langSharedPref){
             "en" ->  localization("en")
             "ar" ->  localization("ar")
         }
     }
 
-    fun localization(lang : String){
+    private fun localization(lang : String){
         val locale = Locale(lang)
         Locale.setDefault(locale)
         val config= Configuration()

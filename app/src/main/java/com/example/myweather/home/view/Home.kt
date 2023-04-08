@@ -1,6 +1,7 @@
 package com.example.myweather.home.view
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,8 +28,11 @@ import com.example.myweather.locations.GpsLocation
 import com.example.myweather.model.Constants
 import com.example.myweather.model.Repository
 import com.example.myweather.model.ResponseModel
+import com.example.myweather.network.ApiState
 import com.example.myweather.network.WeatherClient
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,6 +54,7 @@ class Home : Fragment() {
     lateinit var tempSharedPref: String
     var degree: String= ""
     var address: String= ""
+    lateinit var pd: ProgressDialog
 
 
     override fun onCreateView(
@@ -62,7 +68,6 @@ class Home : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("Home", "onViewCreated: ")
 
         assign()
 
@@ -100,7 +105,7 @@ class Home : Fragment() {
             }
 
             //Set Weather Response
-            try{
+            /*try{
                 viewModel.current.observe(viewLifecycleOwner) {
                     if (it != null) {
                         viewModel.deleteCurrentWeather()
@@ -111,6 +116,26 @@ class Home : Fragment() {
 
             }catch (e: Exception){
                 Log.i("TAG", "Home onViewCreated: ${e.message}")
+            }*/
+            lifecycleScope.launch {
+                viewModel.homeStateFlow.collectLatest {
+                    when(it){
+                        is ApiState.Loading ->{
+                            //pd.setMessage("loading")
+                            //pd.show()
+                        }
+                        is ApiState.Success->{
+                            //pd.dismiss()
+                            Log.i("Home", "Collect latest: ${it.data.timezone}")
+                            viewModel.addCurrentWeather(it.data)
+                            setData(it.data)
+                        }
+                        else->{
+                            //pd.dismiss()
+                            //Toast.makeText(requireContext(),"Check your connection", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
 
         } else {
@@ -119,12 +144,32 @@ class Home : Fragment() {
                 view, "No Internet",
                 Snackbar.LENGTH_INDEFINITE
             ).setActionTextColor(resources.getColor(R.color.light_blue)).show()
-            viewModel.getCurrentWeather()
+            /*viewModel.getLocaleWeather()
             viewModel.current.observe(viewLifecycleOwner){
                 if (it != null){
                     setData(it)
                 }
+            }*/
+            viewModel.getLocaleWeather()
+            lifecycleScope.launch {
+                viewModel.homeStateFlow.collectLatest {
+                    when(it){
+                        is ApiState.Loading ->{
+                            //pd.setMessage("loading")
+                            //pd.show()
+                        }
+                        is ApiState.Success->{
+                            //pd.dismiss()
+                            setData(it.data)
+                        }
+                        else->{
+                            //pd.dismiss()
+                            //Toast.makeText(requireContext(),"Check your connection", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
+
         }
 
         binding.swipeRefresh.setOnRefreshListener {
@@ -134,13 +179,12 @@ class Home : Fragment() {
     }
 
     private fun assign() {
+        pd = ProgressDialog(requireContext())
         gps = GpsLocation(requireContext())
-
         homeFactory = HomeViewModelFactory(
             Repository.getInstance(WeatherClient.getInstance(), ConcreteLocalSource(requireContext())),
             requireContext(), gps
         )
-
         viewModel = ViewModelProvider(this, homeFactory)[HomeViewModel::class.java]
     }
 
@@ -208,20 +252,16 @@ class Home : Fragment() {
     @SuppressLint("SetTextI18n")
     fun setData(response : ResponseModel){
 
-        /*if (addresss.isNotEmpty()) {
-            address= addresss
-            binding.locationTvHome.text = addresss
-        }else{
-            viewModel.current.observe(viewLifecycleOwner){
-                binding.locationTvHome.text= response.timezone
+        val address=
+            when(viewModel.getAddress(response.lat, response.lon)){
+                "Undefined" -> response.timezone
+                else -> viewModel.getAddress(response.lat, response.lon)
             }
-        }*/
-
-        binding.locationTvHome.text= viewModel.getAddress(response.lat, response.lon)
+        binding.locationTvHome.text= address
 
         binding.tempTvHome.text = response.current?.temp?.toInt().toString() + degree
         binding.dateTvHome.text = getCurrentDay(response.current?.dt!!.toInt())
-        binding.descriptionHomeTv.text = response.current?.weather?.get(0)!!.description
+        binding.descriptionHomeTv.text = response.current.weather[0].description
         when (response.current.weather[0].icon) {
             "01n" -> binding.imageView.setImageResource(R.drawable.monn)
             "01d" -> binding.imageView.setImageResource(R.drawable.sunny)

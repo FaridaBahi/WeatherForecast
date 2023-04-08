@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface WeatherDao {
     @Query("SELECT * FROM current")
-    suspend fun getCurrent() : ResponseModel
+    fun getCurrent() : Flow<ResponseModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrent(current : ResponseModel)

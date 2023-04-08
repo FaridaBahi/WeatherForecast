@@ -3,6 +3,7 @@ package com.example.myweather.model
 import com.example.myweather.database.LocalSource
 import com.example.myweather.network.RemoteSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class Repository private constructor(var remoteSource: RemoteSource, var localSource: LocalSource)
     : RepositoryInterface {
@@ -19,17 +20,17 @@ class Repository private constructor(var remoteSource: RemoteSource, var localSo
         }
     }
 
-    override suspend fun getCurrentWeather(
+    override fun getCurrentWeather(
         lat: Double,
         lon: Double,
         lang: String,
         units: String,
         appid: String
-    ): ResponseModel? {
-        return remoteSource.getCurrentWeather(lat, lon, lang, appid, units)
+    ): Flow<ResponseModel> {
+        return flow { emit(remoteSource.getCurrentWeather(lat, lon, lang, appid, units)) }
     }
 
-    override suspend fun getLocalCurrentWeather(): ResponseModel {
+    override fun getLocalCurrentWeather(): Flow<ResponseModel> {
         return localSource.getLocalCurrentWeather()
     }
 

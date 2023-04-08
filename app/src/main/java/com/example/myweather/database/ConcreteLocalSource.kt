@@ -11,7 +11,7 @@ class ConcreteLocalSource(context : Context) : LocalSource {
         db.getWeatherDao()
     }
 
-    override suspend fun getLocalCurrentWeather(): ResponseModel {
+    override fun getLocalCurrentWeather(): Flow<ResponseModel> {
        return dao.getCurrent()
     }
 
