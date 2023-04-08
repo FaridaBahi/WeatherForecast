@@ -252,6 +252,7 @@ class Home : Fragment() {
     @SuppressLint("SetTextI18n")
     fun setData(response : ResponseModel){
 
+        response?.current?.weather?.get(0).let { setBackGround(it?.icon as String) }
         val address=
             when(viewModel.getAddress(response.lat, response.lon)){
                 "Undefined" -> response.timezone
@@ -288,5 +289,14 @@ class Home : Fragment() {
         binding.daysTempRv.layoutManager = LinearLayoutManager(context)
         binding.daysTempRv.adapter = dailyAdapter
         dailyAdapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun setBackGround(icon : String){
+        when (icon) {
+            "01n" -> binding.homeBck.background= resources.getDrawable(R.drawable.night_background)
+            "01d" -> binding.homeBck.background= resources.getDrawable(R.drawable.morning_background)
+            else -> binding.homeBck.setBackgroundColor(R.color.grey)
+        }
     }
 }
