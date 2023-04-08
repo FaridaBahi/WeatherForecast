@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -57,6 +58,15 @@ class Home : Fragment() {
     lateinit var pd: ProgressDialog
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i("Home", "onCreate: ")
+        activity?.onBackPressedDispatcher?.addCallback(this, object: OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                activity?.finish()
+            }
+        })
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -293,10 +303,12 @@ class Home : Fragment() {
 
     @SuppressLint("ResourceAsColor")
     private fun setBackGround(icon : String){
-        when (icon) {
-            "01n" -> binding.homeBck.background= resources.getDrawable(R.drawable.night_background)
-            "01d" -> binding.homeBck.background= resources.getDrawable(R.drawable.morning_background)
-            else -> binding.homeBck.setBackgroundColor(R.color.grey)
+        if (icon.endsWith("n")){
+            binding.homeBck.background= resources.getDrawable(R.drawable.night_background)
+        }else{
+            if(icon.endsWith("d")){
+                binding.homeBck.background= resources.getDrawable(R.drawable.morning_background)
+            }
         }
     }
 }

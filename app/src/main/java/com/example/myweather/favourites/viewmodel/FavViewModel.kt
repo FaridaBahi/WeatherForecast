@@ -1,6 +1,7 @@
 package com.example.myweather.favourites.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,8 +23,6 @@ class FavViewModel(
     val context: Context
 ): ViewModel()
 {
-    private var _savedResponse: MutableLiveData<ResponseModel> = MutableLiveData<ResponseModel>()
-    val savedResponse: LiveData<ResponseModel> = _savedResponse
 
     private var _favStateFlow: MutableStateFlow<FavRoomState> = MutableStateFlow(FavRoomState.Loading)
     var favStateFlow: StateFlow<FavRoomState> = _favStateFlow

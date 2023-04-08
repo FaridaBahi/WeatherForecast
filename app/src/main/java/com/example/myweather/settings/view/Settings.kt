@@ -3,10 +3,13 @@ package com.example.myweather.settings.view
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.myweather.databinding.FragmentSettingsBinding
 import java.util.Locale
@@ -15,6 +18,15 @@ class Settings : Fragment() {
 
     lateinit var binding: FragmentSettingsBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i("Settings", "onCreate: ")
+        activity?.onBackPressedDispatcher?.addCallback(this, object: OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                findNavController().navigate(SettingsDirections.actionSettingsToHome())
+            }
+        })
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -139,4 +151,6 @@ class Settings : Fragment() {
         config.locale= locale
         resources.updateConfiguration(config,resources.displayMetrics)
     }
+
+
 }
