@@ -15,7 +15,7 @@
         android:id="@+id/fav_tv"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="3dp"
         android:background="@color/light_blue"
         android:gravity="center_vertical"
         android:text="TextView"
@@ -24,8 +24,8 @@
 
     <ImageView
         android:id="@+id/deleteBtn_fav"
-        android:layout_width="52dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_gravity="end"
         app:srcCompat="@drawable/baseline_delete_24" />
 

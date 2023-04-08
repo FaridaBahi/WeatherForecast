@@ -55,6 +55,7 @@ class MapsFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i("Map", "onCreateView: ")
         binding = FragmentMapsBinding.inflate(layoutInflater)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
