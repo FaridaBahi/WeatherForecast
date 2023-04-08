@@ -6,17 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.myweather.R
-import com.example.myweather.databinding.DailyItemBinding
 import com.example.myweather.databinding.HourlyItemBinding
 import com.example.myweather.model.Constants
 import com.example.myweather.model.Current
-import com.example.myweather.model.Daily
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.List
 
 class HomeHourlyAdapter(var context: Context, var hourlyList: List<Current>)
     : RecyclerView.Adapter<HomeHourlyAdapter.HourlyViewHolder>() {
@@ -56,6 +51,7 @@ class HomeHourlyAdapter(var context: Context, var hourlyList: List<Current>)
         return 24
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun getCurrentTime(dt: Int): String {
         val date= Date(dt*1000L)
         val sdf= SimpleDateFormat("hh:mm a")
@@ -64,9 +60,9 @@ class HomeHourlyAdapter(var context: Context, var hourlyList: List<Current>)
 
     }
 
-    fun tempDegree(tempShP: String){
+    private fun tempDegree(tempShP: String){
         degree =
-            when (tempSharedPref) {
+            when (tempShP) {
                 "metric" -> Constants.Celsius
                 "standard" -> Constants.Kelvin
                 "imperial" -> Constants.Fahrenheit

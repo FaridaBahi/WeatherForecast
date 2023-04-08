@@ -18,13 +18,15 @@ import com.example.myweather.database.ConcreteLocalSource
 import com.example.myweather.databinding.FragmentMapsBinding
 import com.example.myweather.home.viewmodel.HomeViewModel
 import com.example.myweather.home.viewmodel.HomeViewModelFactory
-import com.example.myweather.model.Favourite
 import com.example.myweather.model.Repository
 import com.example.myweather.network.WeatherClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
@@ -117,11 +119,10 @@ class MapsFragment : Fragment(){
             }.withEndAction{
                 if (args.fromFavourite == "favourite"){
                     var title = ""
-                    binding.mapButton.text = "Save"
                     try {
                         title= address?.get(0)?.adminArea + " " + address?.get(0)?.countryName
                     }catch (e: Exception){
-                        Log.i("TAG", "getAddress: Cant  get addres")
+                        Log.i("TAG", "getAddress: Cant  get address")
                     }
                     findNavController().navigate(MapsFragmentDirections.
                     actionMapsFragmentToFavourites(Lon.toFloat(), lat.toFloat(), title))

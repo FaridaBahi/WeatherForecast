@@ -10,8 +10,14 @@ import com.example.myweather.locations.GpsLocation
 import com.example.myweather.database.Converters
 import com.example.myweather.model.RepositoryInterface
 import com.example.myweather.model.ResponseModel
+import com.example.myweather.network.ApiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class HomeViewModel(
@@ -19,8 +25,12 @@ class HomeViewModel(
     val context: Context,
     val gps: GpsLocation,
 ) : ViewModel() {
-    private var _current: MutableLiveData<ResponseModel> = MutableLiveData<ResponseModel>()
-    val current: LiveData<ResponseModel> = _current
+
+    //private var _current: MutableLiveData<ResponseModel> = MutableLiveData<ResponseModel>()
+    //val current: LiveData<ResponseModel> = _current
+
+    private var _homeStateFlow: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.Loading)
+    var homeStateFlow: StateFlow<ApiState> = _homeStateFlow
 
     val temp: String= context.getSharedPreferences(
        "weatherApp", Context.MODE_PRIVATE)?.getString("temp", "standard").toString()
@@ -32,8 +42,19 @@ class HomeViewModel(
 
 
     fun getRemoteWeather(lat: Double, lon: Double, lang: String= "en", units: String= "standard", appid: String= "8beb73e4a526e79ac6ebf8f114f7ee43") {
-        viewModelScope.launch(Dispatchers.IO) {
+       /* viewModelScope.launch(Dispatchers.IO) {
             _current.postValue(repo.getCurrentWeather(lat, lon, lang, units, appid))
+        }*/
+        viewModelScope.launch (Dispatchers.IO){
+            val response= repo.getCurrentWeather(lat, lon, lang, units, appid)
+            withContext(Dispatchers.Main){
+                response.catch {
+                    _homeStateFlow.value= ApiState.Failure(it)
+                }.collect{
+                    Log.i("ViewModel", "getRemoteWeather: ${it.timezone}")
+                    _homeStateFlow.value= ApiState.Success(it)
+                }
+            }
         }
     }
 
@@ -62,16 +83,27 @@ class HomeViewModel(
     }
 
     fun addCurrentWeather(current : ResponseModel){
-        viewModelScope.launch(Dispatchers.IO) { repo.insertCurrentWeather(current)}
+        deleteCurrentWeather()
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.insertCurrentWeather(current)
+        }
     }
 
     fun deleteCurrentWeather(){
         viewModelScope.launch (Dispatchers.IO){ repo.deleteCurrentWeather() }
     }
 
-    fun getCurrentWeather(){
+    fun getLocaleWeather(){
         viewModelScope.launch (Dispatchers.IO){
-            _current.postValue(repo.getLocalCurrentWeather())
+            val response= repo.getLocalCurrentWeather()
+            withContext(Dispatchers.Main){
+                response.catch {
+                    _homeStateFlow.value= ApiState.Failure(it)
+                }.collect{
+                    ApiState.Success(it)
+                }
+            }
+            //_current.postValue(repo.getLocalCurrentWeather())
         }
     }
 

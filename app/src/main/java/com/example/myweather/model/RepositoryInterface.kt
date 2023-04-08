@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface RepositoryInterface {
-    suspend fun getCurrentWeather(lat:Double, lon:Double, lang:String, units:String, appid:String): ResponseModel?
-    suspend fun getLocalCurrentWeather() : ResponseModel
+    fun getCurrentWeather(lat:Double, lon:Double, lang:String, units:String, appid:String): Flow<ResponseModel>
+    fun getLocalCurrentWeather() : Flow<ResponseModel>
     suspend fun deleteCurrentWeather()
     suspend fun insertCurrentWeather(data : ResponseModel)
     suspend fun getAllSavedLocation() : Flow<List<Favourite>>

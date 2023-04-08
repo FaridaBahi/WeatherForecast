@@ -26,6 +26,7 @@ import com.example.myweather.home.viewmodel.HomeViewModelFactory
 import com.example.myweather.model.Favourite
 import com.example.myweather.model.Repository
 import com.example.myweather.network.WeatherClient
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -52,24 +53,20 @@ class Favourites : Fragment() {
         val lon= args.Longitude.toDouble()
         val lat= args.Latitude.toDouble()
         val title= args.title
-        val favObj= Favourite(title,lon,lat)
 
-        favFactory = FavViewModelFactory(
-            Repository.getInstance(WeatherClient.getInstance(), ConcreteLocalSource(requireContext())),
-            requireContext()
-        )
-        viewModel = ViewModelProvider(this, favFactory)[FavViewModel::class.java]
-        viewModel.getLocaleSavedLocation()
+        assign()
 
         //Inserting
        if (lon != null && lat != null && title != null){
             //viewModel.insertToFavourites(objectFromMap)
+           val favObj= Favourite(title,lon,lat)
            viewModel.insertToFavourites(favObj)
        }
 
        //Deleting
         favAdapter = FavAdapter{
             viewModel.delete(it)
+            showSnackBar(view)
         }
 
         //Displaying
@@ -100,5 +97,20 @@ class Favourites : Fragment() {
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(FavouritesDirections.actionFavouritesToMapsFragment("favourite"))
         }
+    }
+
+    private fun assign(){
+        favFactory = FavViewModelFactory(
+            Repository.getInstance(WeatherClient.getInstance(), ConcreteLocalSource(requireContext())),
+            requireContext()
+        )
+        viewModel = ViewModelProvider(this, favFactory)[FavViewModel::class.java]
+        viewModel.getLocaleSavedLocation()
+    }
+    private fun showSnackBar(view: View){
+        Snackbar.make(
+            view, "Deleted",
+            Snackbar.LENGTH_SHORT
+        ).setActionTextColor(resources.getColor(R.color.light_blue)).show()
     }
 }

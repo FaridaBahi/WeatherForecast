@@ -1,5 +1,6 @@
 package com.example.myweather.network
 
+import android.util.Log
 import com.example.myweather.model.Current
 import com.example.myweather.model.Daily
 import com.example.myweather.model.ResponseModel
@@ -10,26 +11,25 @@ class WeatherClient : RemoteSource {
         RetrofitHelper.retrofit_Instance
     }
 
-    companion object{
-        private var instance: RemoteSource?= null
-        fun getInstance(): RemoteSource{
-            return instance ?: synchronized(this){
-                val inst= WeatherClient()
-                instance= inst
+    companion object {
+        private var instance: RemoteSource? = null
+        fun getInstance(): RemoteSource {
+            return instance ?: synchronized(this) {
+                val inst = WeatherClient()
+                instance = inst
                 inst
             }
         }
     }
 
-    override suspend fun getCurrentWeather(lat:Double, lon:Double, lang:String,units:String,appid:String): ResponseModel? {
-      return api.getWeather(lat, lon, lang, appid,units).body()
+    override suspend fun getCurrentWeather(
+        lat: Double,
+        lon: Double,
+        lang: String,
+        units: String,
+        appid: String
+    ): ResponseModel {
+        Log.i("WeatherClient", "getCurrentWeather: ${api.getWeather(lat, lon, lang, appid, units).body()?.timezone}")
+        return api.getWeather(lat, lon, lang, appid, units).body() as ResponseModel
     }
-
-   /* override suspend fun getHourlyWeather(lat:Double, lon:Double, lang:String,appid:String,units:String): List<Current>? {
-        return api.getWeather(lat, lon, lang, appid,units).body()?.hourly
-    }
-
-    override suspend fun getDailyWeather(lat:Double, lon:Double, lang:String,appid:String,units:String): List<Daily>? {
-        return api.getWeather(lat, lon, lang, appid,units).body()?.daily
-    }*/
 }
