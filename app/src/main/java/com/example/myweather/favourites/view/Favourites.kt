@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -42,7 +43,7 @@ class Favourites : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("Favourite", "onCreate: ")
+        (activity as AppCompatActivity).supportActionBar?.show()
         activity?.onBackPressedDispatcher?.addCallback(this, object: OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
                 findNavController().navigate(FavouritesDirections.actionFavouritesToHome())
@@ -113,8 +114,7 @@ class Favourites : Fragment() {
 
     private fun assign(){
         favFactory = FavViewModelFactory(
-            Repository.getInstance(WeatherClient.getInstance(), ConcreteLocalSource(requireContext())),
-            requireContext()
+            Repository.getInstance(WeatherClient.getInstance(), ConcreteLocalSource(requireContext()))
         )
         viewModel = ViewModelProvider(this, favFactory)[FavViewModel::class.java]
         viewModel.getLocaleSavedLocation()

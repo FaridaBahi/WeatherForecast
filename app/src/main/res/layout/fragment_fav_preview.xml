@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".favourites.view.FavPreview">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_fav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:contentDescription="scrollView">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/favPreview_bck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/location_tv_fav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/zone"
+                    android:textColor="#F1E9E9"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/date_tv_fav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="DDD,DD MMM"
+                    android:textColor="#F1E9E9"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/location_tv_fav"
+                    app:layout_constraintStart_toStartOf="@+id/location_tv_fav"
+                    app:layout_constraintTop_toBottomOf="@+id/location_tv_fav" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="380dp"
+                    android:layout_height="291dp"
+                    android:layout_marginStart="150dp"
+                    android:layout_marginTop="64dp"
+                    android:layout_marginEnd="150dp"
+                    app:cardBackgroundColor="#467FDF"
+                    app:cardCornerRadius="50dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/date_tv_fav">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="361dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/description_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="1dp"
+                            android:gravity="center"
+                            android:text=""
+                            android:textColor="#F1E9E9"
+                            android:textSize="24sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/temp_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="60dp"
+                            android:gravity="center"
+                            android:textColor="#F1E9E9"
+                            android:textSize="90sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/description_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/description_tv_fav"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/imageView_fav"
+                            android:layout_width="114dp"
+                            android:layout_height="88dp"
+                            android:layout_marginTop="18dp"
+                            android:src="@android:drawable/btn_dialog"
+                            app:layout_constraintEnd_toEndOf="@+id/temp_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/temp_tv_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/temp_tv_fav" />
+
+                        <TextView
+                            android:id="@+id/description_fav_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:textColor="@color/white_used"
+                            android:textSize="25sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/time_temp_rv_fav"
+                    android:layout_width="408dp"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="15dp"
+                    android:foregroundGravity="center"
+                    android:padding="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/days_temp_rv_fav"
+                    android:layout_width="408dp"
+                    android:layout_height="170dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/time_temp_rv_fav" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="412dp"
+                    android:layout_height="361dp"
+                    android:layout_margin="15dp"
+                    android:padding="15dp"
+                    app:cardCornerRadius="50dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/days_temp_rv_fav">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/light_grey" >
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/pressure_imageView_fav"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:lottie_rawRes="@raw/air_pressure"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true" />
+
+                        <TextView
+                            android:id="@+id/pressure_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:textColor="#F1E9E9"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/pressure_imageView_fav"
+                            app:layout_constraintStart_toStartOf="@+id/pressure_imageView_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/pressure_imageView_fav" />
+
+                        <TextView
+                            android:id="@+id/textView2_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/pressure"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="@+id/pressure_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/pressure_tv_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/pressure_tv_fav" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/humidity_imageView_fav"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="30dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/pressure_imageView_fav"
+                            app:layout_constraintStart_toEndOf="@+id/pressure_imageView_fav"
+                            app:layout_constraintTop_toTopOf="@+id/pressure_imageView_fav"
+                            app:lottie_rawRes="@raw/humidly"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"/>
+
+                        <TextView
+                            android:id="@+id/humidity_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:textColor="#F1E9E9"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/humidity_imageView_fav"
+                            app:layout_constraintStart_toStartOf="@+id/humidity_imageView_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/humidity_imageView_fav" />
+
+                        <TextView
+                            android:id="@+id/textView5_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/humidity"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="@+id/humidity_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/humidity_tv_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/humidity_tv_fav" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/wind_imageView_fav"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="30dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/humidity_imageView_fav"
+                            app:layout_constraintStart_toEndOf="@+id/humidity_imageView_fav"
+                            app:layout_constraintTop_toTopOf="@+id/humidity_imageView_fav"
+                            app:lottie_rawRes="@raw/windy"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true" />
+
+                        <TextView
+                            android:id="@+id/wind_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:textColor="#F1E9E9"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/wind_imageView_fav"
+                            app:layout_constraintStart_toStartOf="@+id/wind_imageView_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/wind_imageView_fav" />
+
+                        <TextView
+                            android:id="@+id/textView6_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/wind"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="@+id/wind_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/wind_tv_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/wind_tv_fav" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/clouds_imageView_fav"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintEnd_toEndOf="@+id/pressure_imageView_fav"
+                            app:layout_constraintStart_toStartOf="@+id/pressure_imageView_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/textView2_fav"
+                            app:lottie_rawRes="@raw/clouds"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true" />
+
+                        <TextView
+                            android:id="@+id/clouds_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:textColor="#F1E9E9"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/clouds_imageView_fav"
+                            app:layout_constraintStart_toStartOf="@+id/clouds_imageView_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/clouds_imageView_fav" />
+
+                        <TextView
+                            android:id="@+id/textView7_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/clouds"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="@+id/clouds_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/clouds_tv_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/clouds_tv_fav" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/ultra_imageView_fav"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="30dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/clouds_imageView_fav"
+                            app:layout_constraintStart_toEndOf="@+id/clouds_imageView_fav"
+                            app:layout_constraintTop_toTopOf="@+id/clouds_imageView_fav"
+                            app:lottie_rawRes="@raw/uv"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true" />
+
+                        <TextView
+                            android:id="@+id/ultra_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:textColor="#F1E9E9"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/ultra_imageView_fav"
+                            app:layout_constraintStart_toStartOf="@+id/ultra_imageView_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/ultra_imageView_fav" />
+
+                        <TextView
+                            android:id="@+id/textView8_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/uv"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="@+id/ultra_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/ultra_tv_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/ultra_tv_fav" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/visibility_imageView_fav"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="30dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/ultra_imageView_fav"
+                            app:layout_constraintStart_toEndOf="@+id/ultra_imageView_fav"
+                            app:layout_constraintTop_toTopOf="@+id/ultra_imageView_fav"
+                            app:lottie_rawRes="@raw/visibility"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true" />
+
+                        <TextView
+                            android:id="@+id/visibility_tv_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:textColor="#F1E9E9"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/visibility_imageView_fav"
+                            app:layout_constraintStart_toStartOf="@+id/visibility_imageView_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/visibility_imageView_fav" />
+
+                        <TextView
+                            android:id="@+id/textView9_fav"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="@string/visibility"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="@+id/visibility_tv_fav"
+                            app:layout_constraintStart_toStartOf="@+id/visibility_tv_fav"
+                            app:layout_constraintTop_toBottomOf="@+id/visibility_tv_fav" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</RelativeLayout>

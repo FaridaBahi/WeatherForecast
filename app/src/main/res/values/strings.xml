@@ -28,4 +28,16 @@
     <string name="settings" translatable="false">Settings</string>
     <string name="favourites" translatable="false">Favourites</string>
     <string name="alerts" translatable="false">Alerts</string>
+    <string name="loaction">Location</string>
+    <string name="language">Language</string>
+    <string name="temprature">Temprature</string>
+    <string name="gps">GPS</string>
+    <string name="maps">Map</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="celsius">Celsius</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="meter_sec">meter/sec</string>
+    <string name="miles_hour">" miles/hour"</string>
 </resources>

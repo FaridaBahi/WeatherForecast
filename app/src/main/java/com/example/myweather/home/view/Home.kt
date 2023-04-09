@@ -101,48 +101,24 @@ class Home : Fragment() {
             when (locSharedPref) {
                 "maps" -> viewModel.getRemoteWeather(latitude, longitude, langharedPref, tempSharedPref)
                 "gps" -> viewModel.getLocationByGps(requireContext())
+                //"fav" -> viewModel.getRemoteWeather(latitude, longitude, langharedPref, tempSharedPref)
                 else -> Snackbar.make(
                     view, "Choose Location type",
                     Snackbar.LENGTH_LONG
                 ).setActionTextColor(resources.getColor(R.color.light_blue)).show()
             }
 
-            //Set Address
-            viewModel.address.observe(viewLifecycleOwner) {
-                if (it.isNotEmpty()) {
-                    address= it
-                }
-            }
-
             //Set Weather Response
-            /*try{
-                viewModel.current.observe(viewLifecycleOwner) {
-                    if (it != null) {
-                        viewModel.deleteCurrentWeather()
-                        viewModel.addCurrentWeather(it)
-                        setData(it)
-                    }
-                }
-
-            }catch (e: Exception){
-                Log.i("TAG", "Home onViewCreated: ${e.message}")
-            }*/
             lifecycleScope.launch {
                 viewModel.homeStateFlow.collectLatest {
                     when(it){
-                        is ApiState.Loading ->{
-                            //pd.setMessage("loading")
-                            //pd.show()
-                        }
                         is ApiState.Success->{
-                            //pd.dismiss()
                             Log.i("Home", "Collect latest: ${it.data.timezone}")
                             viewModel.addCurrentWeather(it.data)
                             setData(it.data)
                         }
                         else->{
-                            //pd.dismiss()
-                            //Toast.makeText(requireContext(),"Check your connection", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(),"Loading", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -154,27 +130,16 @@ class Home : Fragment() {
                 view, "No Internet",
                 Snackbar.LENGTH_INDEFINITE
             ).setActionTextColor(resources.getColor(R.color.light_blue)).show()
-            /*viewModel.getLocaleWeather()
-            viewModel.current.observe(viewLifecycleOwner){
-                if (it != null){
-                    setData(it)
-                }
-            }*/
+
             viewModel.getLocaleWeather()
             lifecycleScope.launch {
                 viewModel.homeStateFlow.collectLatest {
                     when(it){
-                        is ApiState.Loading ->{
-                            //pd.setMessage("loading")
-                            //pd.show()
-                        }
                         is ApiState.Success->{
-                            //pd.dismiss()
                             setData(it.data)
                         }
                         else->{
-                            //pd.dismiss()
-                            //Toast.makeText(requireContext(),"Check your connection", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(),"Loading", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

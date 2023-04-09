@@ -11,7 +11,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.example.myweather.InitialSetupDirections
 import com.example.myweather.databinding.FragmentSettingsBinding
+import com.example.myweather.home.view.HomeDirections
 import java.util.Locale
 
 class Settings : Fragment() {
@@ -93,6 +95,10 @@ class Settings : Fragment() {
             editor?.commit()
 
             localization("ar")
+
+            //activity?.recreate()
+            //findNavController().navigate(InitialSetupDirections.actionInitialSetupToSettings())
+        findNavController().navigate(SettingsDirections.actionSettingsSelf())
         }
 
         binding.englishRadioButton.setOnClickListener {
@@ -102,6 +108,10 @@ class Settings : Fragment() {
             editor?.commit()
 
             localization("en")
+
+            //activity?.recreate()
+            //findNavController().navigate(InitialSetupDirections.actionInitialSetupToSettings())
+        findNavController().navigate(SettingsDirections.actionSettingsSelf())
         }
 
         binding.celsiusRadioButton.setOnClickListener {
