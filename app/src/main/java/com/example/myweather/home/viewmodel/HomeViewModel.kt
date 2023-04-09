@@ -26,9 +26,6 @@ class HomeViewModel(
     val gps: GpsLocation,
 ) : ViewModel() {
 
-    //private var _current: MutableLiveData<ResponseModel> = MutableLiveData<ResponseModel>()
-    //val current: LiveData<ResponseModel> = _current
-
     private var _homeStateFlow: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.Loading)
     var homeStateFlow: StateFlow<ApiState> = _homeStateFlow
 
@@ -42,9 +39,6 @@ class HomeViewModel(
 
 
     fun getRemoteWeather(lat: Double, lon: Double, lang: String= "en", units: String= "standard", appid: String= "8beb73e4a526e79ac6ebf8f114f7ee43") {
-       /* viewModelScope.launch(Dispatchers.IO) {
-            _current.postValue(repo.getCurrentWeather(lat, lon, lang, units, appid))
-        }*/
         viewModelScope.launch (Dispatchers.IO){
             val response= repo.getCurrentWeather(lat, lon, lang, units, appid)
             withContext(Dispatchers.Main){

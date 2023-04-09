@@ -11,11 +11,9 @@
         android:label="@string/favourites"
         tools:layout="@layout/fragment_favourites" >
         <action
-            android:id="@+id/action_favourites_to_home"
-            app:destination="@id/home" />
-        <action
             android:id="@+id/action_favourites_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            app:destination="@id/mapsFragment"
+            app:popUpTo="@id/favourites" app:popUpToInclusive="true"/>
         <argument
             android:name="Longitude"
             android:defaultValue="1.2"
@@ -28,6 +26,13 @@
             android:name="title"
             android:defaultValue="none"
             app:argType="string" />
+        <action
+            android:id="@+id/action_favourites_to_favPreview"
+            app:destination="@id/favPreview"
+            app:popUpTo="@id/favourites" app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_favourites_to_home"
+            app:destination="@id/home" />
     </fragment>
     <fragment
         android:id="@+id/settings"
@@ -40,6 +45,9 @@
         <action
             android:id="@+id/action_settings_to_home"
             app:destination="@id/home" />
+        <action
+            android:id="@+id/action_settings_self"
+            app:destination="@id/settings" />
     </fragment>
     <fragment
         android:id="@+id/alert"
@@ -83,6 +91,9 @@
         <action
             android:id="@+id/action_intialSetup_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_initialSetup_to_settings"
+            app:destination="@id/settings" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -99,5 +110,23 @@
             android:name="fromFavourite"
             app:argType="string"
             android:defaultValue="none" />
+    </fragment>
+    <fragment
+        android:id="@+id/favPreview"
+        android:name="com.example.myweather.favourites.view.FavPreview"
+        android:label="fragment_fav_preview"
+        tools:layout="@layout/fragment_fav_preview" >
+        <argument
+            android:name="Longitude"
+            app:argType="float" />
+        <argument
+            android:name="Latitude"
+            app:argType="float" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_favPreview_to_favourites"
+            app:destination="@id/favourites" />
     </fragment>
 </navigation>

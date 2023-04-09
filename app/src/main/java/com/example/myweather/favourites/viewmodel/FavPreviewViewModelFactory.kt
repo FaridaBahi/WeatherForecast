@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myweather.home.viewmodel.HomeViewModel
 import com.example.myweather.model.RepositoryInterface
 
-class FavViewModelFactory(
-    val repo: RepositoryInterface
-) : ViewModelProvider.Factory {
-
+class FavPreviewViewModelFactory(
+    val repo: RepositoryInterface,
+    val context: Context
+) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(FavViewModel::class.java)) {
-            FavViewModel(repo) as T
+        return if (modelClass.isAssignableFrom(FavPreviewViewModel::class.java)) {
+            FavPreviewViewModel(repo, context) as T
         } else {
-            throw java.lang.IllegalArgumentException("Favourite View Model class is not found")
+            throw java.lang.IllegalArgumentException("Fav Preview View Model class is not found")
         }
     }
 }

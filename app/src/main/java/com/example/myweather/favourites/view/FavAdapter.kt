@@ -38,10 +38,15 @@ class FavAdapter( private val onClick:(Favourite)->Unit) :
         holder.binding.deleteBtnFav.setOnClickListener { onClick(currentObj) }
         holder.binding.favCardView.setOnClickListener{
             if (checkForInternet(it.context)){
+               /* val sharedPreference =  it.context.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
+                val editor = sharedPreference?.edit()
+                editor?.putString("location","fav")
+                editor?.apply()*/
+
                 findNavController(it)
                     .navigate(FavouritesDirections
-                        .actionFavouritesToHome(currentObj.longitude.toFloat(),
-                            currentObj.latitude.toFloat()))
+                        .actionFavouritesToFavPreview(currentObj.longitude.toFloat(),
+                            currentObj.latitude.toFloat(), currentObj.name))
             }else{
                 Snackbar.make(
                     it, "No Internet",

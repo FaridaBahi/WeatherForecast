@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Location"
+            android:text="@string/loaction"
             android:textColor="@color/white_used"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -52,7 +52,7 @@
                 android:id="@+id/gps_radioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="GPS"
+                android:text="@string/gps"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Map"
+                android:text="@string/maps"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Language"
+            android:text="@string/language"
             android:textColor="@color/white_used"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -114,7 +114,7 @@
                 android:id="@+id/arabic_radioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Arabic"
+                android:text="@string/arabic"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="English"
+                android:text="@string/english"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -150,7 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Temprature"
+            android:text="@string/temprature"
             android:textColor="@color/white_used"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -174,7 +174,7 @@
                 android:id="@+id/celsius_radioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Celsius"
+                android:text="@string/celsius"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -184,16 +184,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Fahrenheit"
+                android:text="@string/fahrenheit"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
             <RadioButton
                 android:id="@+id/kelvin_radioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text="Kelvin"
+                android:text="@string/kelvin"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -219,7 +220,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Wind"
+            android:text="@string/wind"
             android:textColor="@color/white_used"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -243,7 +244,7 @@
                 android:id="@+id/meter_radioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="meter/sec"
+                android:text="@string/meter_sec"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -253,7 +254,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:text=" miles/hour"
+                android:text="@string/miles_hour"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />

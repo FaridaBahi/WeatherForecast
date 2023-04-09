@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">الطقس</string>
+    <string name="app_name">برنامج الطقس</string>
     <string name="pressure">الضغط</string>
     <string name="zone">المنطقة</string>
     <string name="visibility">الرؤية</string>
@@ -14,4 +14,16 @@
     <string name="settings">الاعدادات</string>
     <string name="favourites">المفضلات</string>
     <string name="alerts">التنبيهات</string>
+    <string name="loaction">الموقع</string>
+    <string name="language">اللغة</string>
+    <string name="temprature">الحرارة</string>
+    <string name="gps">نظام التموضع</string>
+    <string name="maps">الخريطة</string>
+    <string name="arabic">عربي</string>
+    <string name="english">انجليزي</string>
+    <string name="celsius">سيلزيوس</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="kelvin">كلفن</string>
+    <string name="meter_sec">متر/الثانية</string>
+    <string name="miles_hour">ميل/الساعة</string>
 </resources>
