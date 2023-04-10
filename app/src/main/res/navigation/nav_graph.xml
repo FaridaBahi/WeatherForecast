@@ -53,7 +53,11 @@
         android:id="@+id/alert"
         android:name="com.example.myweather.alerts.view.Alert"
         android:label="@string/alerts"
-        tools:layout="@layout/fragment_alert" />
+        tools:layout="@layout/fragment_alert" >
+        <action
+            android:id="@+id/action_alert_to_home"
+            app:destination="@id/home" />
+    </fragment>
     <fragment
         android:id="@+id/home"
         android:name="com.example.myweather.home.view.Home"
@@ -65,9 +69,6 @@
         <action
             android:id="@+id/action_home4_to_favourites"
             app:destination="@id/favourites" />
-        <action
-            android:id="@+id/action_home4_to_alert"
-            app:destination="@id/alert" />
         <argument
             android:name="Longitude"
             android:defaultValue="1.2"

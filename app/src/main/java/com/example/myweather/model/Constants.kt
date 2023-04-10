@@ -10,3 +10,4 @@ class Constants {
     }
 
 }
+const val APP_ID = "8beb73e4a526e79ac6ebf8f114f7ee43"

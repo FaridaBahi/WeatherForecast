@@ -117,7 +117,6 @@ class Favourites : Fragment() {
             Repository.getInstance(WeatherClient.getInstance(), ConcreteLocalSource(requireContext()))
         )
         viewModel = ViewModelProvider(this, favFactory)[FavViewModel::class.java]
-        viewModel.getLocaleSavedLocation()
     }
     private fun showSnackBar(view: View){
         Snackbar.make(

@@ -1,5 +1,6 @@
 package com.example.myweather.model
 
+import android.util.Log
 import com.example.myweather.database.LocalSource
 import com.example.myweather.network.RemoteSource
 import kotlinx.coroutines.flow.Flow
@@ -31,14 +32,17 @@ class Repository private constructor(var remoteSource: RemoteSource, var localSo
     }
 
     override fun getLocalCurrentWeather(): Flow<ResponseModel> {
+        Log.i("Repo", "getLocalCurrentWeather: ")
         return localSource.getLocalCurrentWeather()
     }
 
     override suspend fun deleteCurrentWeather() {
+        Log.i("Repo", "deleteCurrentWeather: ")
         localSource.deleteCurrentWeather()
     }
 
     override suspend fun insertCurrentWeather(data: ResponseModel) {
+        Log.i("Repo", "insertCurrentWeather: ${data.timezone}")
         localSource.insertCurrentWeather(data)
     }
 
@@ -52,5 +56,17 @@ class Repository private constructor(var remoteSource: RemoteSource, var localSo
 
     override suspend fun removeSavedLocation(location: Favourite) {
         localSource.removeSavedLocation(location)
+    }
+
+    override fun getStoredAlerts(): Flow<List<AlertModel>> {
+        return localSource.getStoredAlerts()
+    }
+
+    override suspend fun insertAlert(alert: AlertModel): Long {
+        return localSource.insertAlert(alert)
+    }
+
+    override suspend fun deleteAlert(alert: AlertModel) {
+        localSource.deleteAlert(alert)
     }
 }

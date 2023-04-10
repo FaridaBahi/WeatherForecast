@@ -19,6 +19,11 @@ import java.util.Locale
 class Settings : Fragment() {
 
     lateinit var binding: FragmentSettingsBinding
+    var langharedPref : String? = null
+    var tempSharedPref : String? = null
+    var windSharedPref : String? = null
+    var locSharedPref  : String? = null
+    var notifySharedPref : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +46,67 @@ class Settings : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val langharedPref = activity?.getSharedPreferences(
-            "weatherApp", Context.MODE_PRIVATE
-        )?.getString("language", "standard").toString()
-        val tempSharedPref = activity?.getSharedPreferences(
-            "weatherApp", Context.MODE_PRIVATE
-        )?.getString("temp", "standard").toString()
-        val windSharedPref = activity?.getSharedPreferences(
-            "weatherApp", Context.MODE_PRIVATE
-        )?.getString("wind", "standard").toString()
-        val locSharedPref = activity?.getSharedPreferences(
-            "weatherApp", Context.MODE_PRIVATE
-        )?.getString("location", "none").toString()
+        getSharedPref()
+        initializeSettings()
 
+        binding.gpsRadioButton.setOnClickListener {
+            editSharedPref("location","gps")
+        }
+
+        binding.mapRadioButton.setOnClickListener {
+            editSharedPref("location","maps")
+            findNavController().navigate(SettingsDirections.actionSettingsToMapsFragment())
+        }
+
+        binding.arabicRadioButton.setOnClickListener {
+            editSharedPref("language","ar")
+            localization("ar")
+
+            //activity?.recreate()
+            //findNavController().navigate(InitialSetupDirections.actionInitialSetupToSettings())
+        findNavController().navigate(SettingsDirections.actionSettingsSelf())
+        }
+
+        binding.englishRadioButton.setOnClickListener {
+            editSharedPref("language","en")
+            localization("en")
+        findNavController().navigate(SettingsDirections.actionSettingsSelf())
+        }
+
+        binding.celsiusRadioButton.setOnClickListener {
+            editSharedPref("temp","metric")
+            binding.meterRadioButton.isChecked= true
+        }
+
+        binding.fahrenheitRadioButton.setOnClickListener {
+            editSharedPref("temp","imperial")
+            binding.milesRadioButton.isChecked= true
+        }
+
+        binding.kelvinRadioButton.setOnClickListener {
+            editSharedPref("temp","standard")
+            binding.meterRadioButton.isChecked= true
+        }
+
+        binding.meterRadioButton.setOnClickListener {
+            editSharedPref("wind","m/s")
+        }
+
+        binding.milesRadioButton.setOnClickListener {
+            editSharedPref("wind","mph")
+            binding.fahrenheitRadioButton.isChecked= true
+        }
+
+        binding.enableRadioButton.setOnClickListener {
+            editSharedPref("notification","enable")
+        }
+
+        binding.disbaleRadioButton.setOnClickListener {
+            editSharedPref("notification","disable")
+        }
+    }
+
+    private fun initializeSettings() {
         when(langharedPref){
             "en" -> binding.englishRadioButton.isChecked= true
             "ar" -> binding.arabicRadioButton.isChecked= true
@@ -71,95 +124,43 @@ class Settings : Fragment() {
             "maps" -> binding.mapRadioButton.isChecked= true
             "gps" -> binding.gpsRadioButton.isChecked= true
         }
-
-        binding.gpsRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp", Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("location","gps")
-            editor?.commit()
-        }
-
-        binding.mapRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("location","maps")
-            editor?.commit()
-
-            findNavController().navigate(SettingsDirections.actionSettingsToMapsFragment())
-        }
-
-        binding.arabicRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("language","ar")
-            editor?.commit()
-
-            localization("ar")
-
-            //activity?.recreate()
-            //findNavController().navigate(InitialSetupDirections.actionInitialSetupToSettings())
-        findNavController().navigate(SettingsDirections.actionSettingsSelf())
-        }
-
-        binding.englishRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("language","en")
-            editor?.commit()
-
-            localization("en")
-
-            //activity?.recreate()
-            //findNavController().navigate(InitialSetupDirections.actionInitialSetupToSettings())
-        findNavController().navigate(SettingsDirections.actionSettingsSelf())
-        }
-
-        binding.celsiusRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("temp","metric")
-            editor?.commit()
-            binding.meterRadioButton.isChecked= true
-        }
-
-        binding.fahrenheitRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("temp","imperial")
-            editor?.commit()
-            binding.milesRadioButton.isChecked= true
-        }
-
-        binding.kelvinRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("temp","standard")
-            editor?.commit()
-            binding.meterRadioButton.isChecked= true
-        }
-
-        binding.meterRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("wind","m/s")
-            editor?.commit()
-        }
-
-        binding.milesRadioButton.setOnClickListener {
-            val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-            val editor = sharedPreference?.edit()
-            editor?.putString("wind","mph")
-            editor?.commit()
-            binding.fahrenheitRadioButton.isChecked= true
+        when(notifySharedPref){
+            "enable" -> binding.enableRadioButton.isChecked= true
+            "disable" -> binding.disbaleRadioButton.isChecked= true
         }
     }
 
-    fun localization(lang : String){
+    private fun localization(lang : String){
         val locale = Locale(lang)
         Locale.setDefault(locale)
         val config= Configuration()
         config.locale= locale
         resources.updateConfiguration(config,resources.displayMetrics)
+    }
+
+    private fun getSharedPref(){
+        langharedPref = activity?.getSharedPreferences(
+            "weatherApp", Context.MODE_PRIVATE
+        )?.getString("language", "standard").toString()
+        tempSharedPref = activity?.getSharedPreferences(
+            "weatherApp", Context.MODE_PRIVATE
+        )?.getString("temp", "standard").toString()
+        windSharedPref = activity?.getSharedPreferences(
+            "weatherApp", Context.MODE_PRIVATE
+        )?.getString("wind", "standard").toString()
+        locSharedPref = activity?.getSharedPreferences(
+            "weatherApp", Context.MODE_PRIVATE
+        )?.getString("location", "none").toString()
+        notifySharedPref= activity?.getSharedPreferences(
+            "weatherApp", Context.MODE_PRIVATE
+        )?.getString("notification", "disable").toString()
+    }
+
+    private fun editSharedPref(category: String, value: String){
+        val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
+        val editor = sharedPreference?.edit()
+        editor?.putString(category,value)
+        editor?.commit()
     }
 
 

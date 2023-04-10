@@ -2,6 +2,7 @@ package com.example.myweather.model
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "current", primaryKeys = ["lat", "lon"])
 data class ResponseModel(
@@ -13,7 +14,7 @@ data class ResponseModel(
     val current: Current?,
     val hourly: List<Current>,
     val daily: List<Daily>,
-    //val alerts: List<Alerts> = arrayListOf()
+    val alerts: List<Alerts> = arrayListOf()
 ){
     constructor():this(0.0,0.0,"",0L,null, listOf(), listOf())
 }
@@ -95,4 +96,16 @@ data class Temp (
     val morn: Double
 ){
     constructor(): this(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+}
+
+data class Alerts(
+    var senderName: String? = null,
+    var event: String? = null,
+    var start: Int? = null,
+    var end: Int? = null,
+    var description: String? = null,
+    //var tags: ArrayList<String> = arrayListOf()
+
+): java.io.Serializable {
+    constructor():this(null,null,null,null,null)
 }

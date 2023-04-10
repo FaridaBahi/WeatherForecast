@@ -156,6 +156,7 @@
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
+        android:id="@+id/tempCardView"
         android:layout_width="164dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -255,6 +256,65 @@
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
                 android:text="@string/miles_hour"
+                android:textColor="@color/white_used"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewNotify"
+        android:layout_width="157dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/light_blue"
+        android:backgroundTint="@color/light_blue"
+        app:cardCornerRadius="50dp"
+        app:cardMaxElevation="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/tempCardView"
+        app:layout_constraintStart_toStartOf="@+id/tempCardView"
+        app:layout_constraintTop_toBottomOf="@+id/tempCardView">
+
+        <TextView
+            android:id="@+id/textViewNotify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/notifications"
+            android:textColor="@color/white_used"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="164dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="#878282"
+        app:cardCornerRadius="25dp"
+        app:layout_constraintEnd_toEndOf="@+id/cardViewNotify"
+        app:layout_constraintStart_toStartOf="@+id/cardViewNotify"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewNotify">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|start">
+
+            <RadioButton
+                android:id="@+id/enable_radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enable"
+                android:textColor="@color/white_used"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/disbale_radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/disable"
                 android:textColor="@color/white_used"
                 android:textSize="20sp"
                 android:textStyle="bold" />

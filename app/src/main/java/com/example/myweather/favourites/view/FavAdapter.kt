@@ -16,6 +16,7 @@ import com.example.myweather.MainActivity
 import com.example.myweather.R
 import com.example.myweather.databinding.FavItemBinding
 import com.example.myweather.model.Favourite
+import com.example.myweather.network.NetworkChecker
 import com.google.android.material.snackbar.Snackbar
 
 class FavAdapter( private val onClick:(Favourite)->Unit) :
@@ -37,12 +38,7 @@ class FavAdapter( private val onClick:(Favourite)->Unit) :
         holder.binding.favTv.text= currentObj.name
         holder.binding.deleteBtnFav.setOnClickListener { onClick(currentObj) }
         holder.binding.favCardView.setOnClickListener{
-            if (checkForInternet(it.context)){
-               /* val sharedPreference =  it.context.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
-                val editor = sharedPreference?.edit()
-                editor?.putString("location","fav")
-                editor?.apply()*/
-
+            if (NetworkChecker.checkForInternet(it.context)){
                 findNavController(it)
                     .navigate(FavouritesDirections
                         .actionFavouritesToFavPreview(currentObj.longitude.toFloat(),
@@ -64,20 +60,6 @@ class FavAdapter( private val onClick:(Favourite)->Unit) :
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: Favourite, newItem: Favourite): Boolean {
             return oldItem == newItem
-        }
-    }
-
-    private fun checkForInternet(context: Context): Boolean {
-
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val network = connectivityManager.activeNetwork ?: return false
-        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-
-        return when {
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            else -> false
         }
     }
 }
