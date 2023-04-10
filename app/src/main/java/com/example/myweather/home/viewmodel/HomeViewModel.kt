@@ -79,15 +79,12 @@ class HomeViewModel(
     }
 
     fun addCurrentWeather(current : ResponseModel){
-        Log.i("ViewModel", "addCurrentWeather: ${current.timezone} ")
-        //deleteCurrentWeather()
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertCurrentWeather(current)
         }
     }
 
     fun deleteCurrentWeather(){
-        Log.i("ViewModel", "deleteCurrentWeather: ")
         viewModelScope.launch (Dispatchers.IO){ repo.deleteCurrentWeather() }
     }
 
