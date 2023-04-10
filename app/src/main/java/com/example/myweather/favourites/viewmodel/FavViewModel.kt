@@ -27,6 +27,10 @@ class FavViewModel(
     private var _favStateFlow: MutableStateFlow<FavRoomState> = MutableStateFlow(FavRoomState.Loading)
     var favStateFlow: StateFlow<FavRoomState> = _favStateFlow
 
+    init {
+        getLocaleSavedLocation()
+    }
+
     fun getLocaleSavedLocation(){
         viewModelScope.launch(Dispatchers.IO) {
             val locations= repo.getAllSavedLocation()

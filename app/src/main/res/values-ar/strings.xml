@@ -26,4 +26,16 @@
     <string name="kelvin">كلفن</string>
     <string name="meter_sec">متر/الثانية</string>
     <string name="miles_hour">ميل/الساعة</string>
+    <string name="from">من</string>
+    <string name="to">الي</string>
+    <string name="start_date">تاريخ البداية</string>
+    <string name="end_date">تاريخ الانتهاء</string>
+    <string name="start_time">وقت البدء</string>
+    <string name="end_time">وقت الانتهاء</string>
+    <string name="notifications">الاشعارات</string>
+    <string name="cancel">الغاء</string>
+    <string name="ok">موافق</string>
+    <string name="dismiss">رفض</string>
+    <string name="enable">سماح</string>
+    <string name="disable">منع</string>
 </resources>

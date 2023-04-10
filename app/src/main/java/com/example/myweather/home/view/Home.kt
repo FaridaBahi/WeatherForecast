@@ -30,6 +30,7 @@ import com.example.myweather.model.Constants
 import com.example.myweather.model.Repository
 import com.example.myweather.model.ResponseModel
 import com.example.myweather.network.ApiState
+import com.example.myweather.network.NetworkChecker
 import com.example.myweather.network.WeatherClient
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
@@ -45,7 +46,6 @@ class Home : Fragment() {
     lateinit var dailyAdapter: HomeDailyAdapter
     lateinit var hourlyAdapter: HomeHourlyAdapter
     lateinit var binding: FragmentHomeBinding
-    //31.217293724615672 //29.960048284658562
 
     lateinit var gps: GpsLocation
 
@@ -54,7 +54,6 @@ class Home : Fragment() {
     lateinit var langharedPref: String
     lateinit var tempSharedPref: String
     var degree: String= ""
-    var address: String= ""
     lateinit var pd: ProgressDialog
 
 
@@ -95,13 +94,12 @@ class Home : Fragment() {
                 else -> ""
             }
 
-        if (checkForInternet(requireContext())) {
+        if (NetworkChecker.checkForInternet(requireContext())) {
             Toast.makeText(requireContext(), "Connected", Toast.LENGTH_SHORT).show()
 
             when (locSharedPref) {
                 "maps" -> viewModel.getRemoteWeather(latitude, longitude, langharedPref, tempSharedPref)
                 "gps" -> viewModel.getLocationByGps(requireContext())
-                //"fav" -> viewModel.getRemoteWeather(latitude, longitude, langharedPref, tempSharedPref)
                 else -> Snackbar.make(
                     view, "Choose Location type",
                     Snackbar.LENGTH_LONG
@@ -114,6 +112,7 @@ class Home : Fragment() {
                     when(it){
                         is ApiState.Success->{
                             Log.i("Home", "Collect latest: ${it.data.timezone}")
+                            viewModel.deleteCurrentWeather()
                             viewModel.addCurrentWeather(it.data)
                             setData(it.data)
                         }
@@ -136,6 +135,7 @@ class Home : Fragment() {
                 viewModel.homeStateFlow.collectLatest {
                     when(it){
                         is ApiState.Success->{
+                            Log.i("Home", "Collect get LocalWeather: ${it.data.timezone} ")
                             setData(it.data)
                         }
                         else->{
@@ -179,38 +179,6 @@ class Home : Fragment() {
         )?.getString("location", "none").toString()
     }
 
-    private fun checkForInternet(context: Context): Boolean {
-
-        // register activity with the connectivity manager service
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        // if the android version is equal to M or greater we need to use the
-        // NetworkCapabilities to check what type of network has the internet connection
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            // Returns a Network object corresponding to the currently active default data network.
-            val network = connectivityManager.activeNetwork ?: return false
-
-            // Representation of the capabilities of an active network.
-            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-
-                // Indicates this network uses a Cellular transport. or Cellular has network connectivity
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-
-                else -> false
-            }
-        } else {
-            // if the android version is below M
-            @Suppress("DEPRECATION") val networkInfo =
-                connectivityManager.activeNetworkInfo ?: return false
-            @Suppress("DEPRECATION")
-            return networkInfo.isConnected
-        }
-    }
-
     @SuppressLint("SimpleDateFormat")
     fun getCurrentDay(dt: Int): String {
         val date = Date(dt * 1000L)
@@ -227,7 +195,14 @@ class Home : Fragment() {
     @SuppressLint("SetTextI18n")
     fun setData(response : ResponseModel){
 
-        response?.current?.weather?.get(0).let { setBackGround(it?.icon as String) }
+        val sharedPreference =  activity?.getSharedPreferences("weatherApp",Context.MODE_PRIVATE)
+        val editor = sharedPreference?.edit()
+        editor?.putString("latitude",response.lat.toString())
+        editor?.putString("longitude",response.lon.toString())
+        editor?.putString("address",response.timezone)
+        editor?.apply()
+
+        response.current?.weather?.get(0).let { setBackGround(it?.icon as String) }
         val address=
             when(viewModel.getAddress(response.lat, response.lon)){
                 "Undefined" -> response.timezone

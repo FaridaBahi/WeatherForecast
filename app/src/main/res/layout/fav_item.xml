@@ -24,9 +24,9 @@
 
     <ImageView
         android:id="@+id/deleteBtn_fav"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_gravity="end"
+        android:layout_width="40dp"
+        android:layout_height="37dp"
+        android:layout_gravity="center_vertical|end"
         app:srcCompat="@drawable/baseline_delete_24" />
 
 </androidx.cardview.widget.CardView>

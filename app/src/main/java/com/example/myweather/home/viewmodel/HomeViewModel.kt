@@ -8,6 +8,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.example.myweather.locations.GpsLocation
 import com.example.myweather.database.Converters
+import com.example.myweather.model.APP_ID
 import com.example.myweather.model.RepositoryInterface
 import com.example.myweather.model.ResponseModel
 import com.example.myweather.network.ApiState
@@ -38,7 +39,8 @@ class HomeViewModel(
     val address: LiveData<String> = _address
 
 
-    fun getRemoteWeather(lat: Double, lon: Double, lang: String= "en", units: String= "standard", appid: String= "8beb73e4a526e79ac6ebf8f114f7ee43") {
+    fun getRemoteWeather(lat: Double, lon: Double, lang: String= "en", units: String= "standard", appid: String= APP_ID) {
+
         viewModelScope.launch (Dispatchers.IO){
             val response= repo.getCurrentWeather(lat, lon, lang, units, appid)
             withContext(Dispatchers.Main){
@@ -77,13 +79,15 @@ class HomeViewModel(
     }
 
     fun addCurrentWeather(current : ResponseModel){
-        deleteCurrentWeather()
+        Log.i("ViewModel", "addCurrentWeather: ${current.timezone} ")
+        //deleteCurrentWeather()
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertCurrentWeather(current)
         }
     }
 
     fun deleteCurrentWeather(){
+        Log.i("ViewModel", "deleteCurrentWeather: ")
         viewModelScope.launch (Dispatchers.IO){ repo.deleteCurrentWeather() }
     }
 
@@ -94,10 +98,10 @@ class HomeViewModel(
                 response.catch {
                     _homeStateFlow.value= ApiState.Failure(it)
                 }.collect{
-                    ApiState.Success(it)
+                    Log.i("ViewModel", "getLocaleWeather: ${it.timezone}")
+                    _homeStateFlow.value= ApiState.Success(it)
                 }
             }
-            //_current.postValue(repo.getLocalCurrentWeather())
         }
     }
 
