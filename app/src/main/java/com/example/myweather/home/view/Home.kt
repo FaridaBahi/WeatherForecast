@@ -111,7 +111,6 @@ class Home : Fragment() {
                 viewModel.homeStateFlow.collectLatest {
                     when(it){
                         is ApiState.Success->{
-                            Log.i("Home", "Collect latest: ${it.data.timezone}")
                             viewModel.deleteCurrentWeather()
                             viewModel.addCurrentWeather(it.data)
                             setData(it.data)
